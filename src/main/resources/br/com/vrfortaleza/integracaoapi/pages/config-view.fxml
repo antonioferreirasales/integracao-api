@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+
+<TabPane fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="347.0" prefWidth="684.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.vrfortaleza.integracaoapi.pages.ConfigController">
+    <tabs>
+        <Tab fx:id="lojaTab" closable="false" text="Loja" />
+        <Tab fx:id="invetarioTab" closable="false" text="Inventário" />
+    </tabs>
+</TabPane>

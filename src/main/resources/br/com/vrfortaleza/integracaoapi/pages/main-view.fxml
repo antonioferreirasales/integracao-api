@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import br.com.vrfortaleza.integracaoapi.pages.components.controllers.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" prefHeight="180.0" prefWidth="614.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.vrfortaleza.integracaoapi.pages.MainController">
+  <MainMenu fx:id="mainMenu" onContextMenuRequested="#loadConfigBody">
+      <VBox.margin>
+         <Insets />
+      </VBox.margin></MainMenu>
+    <Pane fx:id="contentPane" />
+   <ButtonBar fx:id="buttonBar" prefHeight="40.0" prefWidth="200.0">
+     <buttons>
+       <Button fx:id="homeButton" mnemonicParsing="false" onAction="#loadMainBody" text="Voltar" />
+     </buttons>
+   </ButtonBar>
+</VBox>
