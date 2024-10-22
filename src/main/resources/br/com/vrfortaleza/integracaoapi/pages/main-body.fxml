@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import br.com.vrfortaleza.integracaoapi.pages.components.controllers.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import org.controlsfx.control.*?>
 
-<?import br.com.vrfortaleza.integracaoapi.pages.components.controllers.ExportarButton?>
-<?import br.com.vrfortaleza.integracaoapi.pages.components.controllers.SelecionarArquivoButton?>
-<?import javafx.geometry.Insets?>
-<?import org.controlsfx.control.CheckComboBox?>
-<VBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="br.com.vrfortaleza.integracaoapi.pages.MainBodyController" prefHeight="347.0" prefWidth="684.0">
+<VBox fx:id="vBoxPane" prefHeight="347.0" prefWidth="684.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.vrfortaleza.integracaoapi.pages.MainBodyController">
         <children>
             <AnchorPane prefHeight="200.0" prefWidth="200.0">
                 <children>
                     <ChoiceBox layoutY="47.0" prefHeight="36.0" prefWidth="115.0" />
-                    <DatePicker layoutX="149.0" layoutY="47.0" promptText="Inicial" />
-                    <DatePicker layoutX="381.0" layoutY="47.0" promptText="Final" />
+                    <DatePicker fx:id="dataInicio" onAction="#setDataInicial" layoutX="149.0" layoutY="47.0" promptText="Inicial" />
+                    <DatePicker fx:id="dataFinal" onAction="#setDataFinal" layoutX="381.0" layoutY="47.0" promptText="Final" />
                     <Label layoutX="-2.0" layoutY="27.0" text="Data" />
                 </children>
             </AnchorPane>
@@ -29,10 +26,10 @@
             </AnchorPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0">
                 <children>
-                    <SelecionarArquivoButton layoutX="391.0" layoutY="30.0" prefHeight="36.0" prefWidth="50.0" />
-                    <TextField layoutY="32.0" prefHeight="32.0" prefWidth="376.0" />
+                    <SelecionarArquivoButton fx:id="selecionarArquivoButton" layoutX="391.0" layoutY="30.0" onAction="#selecionarArquivo" prefHeight="36.0" prefWidth="50.0" />
+                    <TextField fx:id="destinoTextField" layoutY="32.0" prefHeight="32.0" prefWidth="376.0" />
                     <Label layoutY="14.0" text="Destino" />
-                    <ExportarButton layoutX="465.0" layoutY="30.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="104.0" text="Exportar" />
+                    <ExportarButton layoutX="465.0" layoutY="30.0" mnemonicParsing="false" onAction="#buttonClicked" prefHeight="36.0" prefWidth="104.0" text="Exportar" />
                 </children>
             </AnchorPane>
         </children>
