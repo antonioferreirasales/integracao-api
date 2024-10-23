@@ -63,11 +63,13 @@ public class MainController implements Initializable {
         if (!isCurrentLoader(MAIN_BODY_FXML)) {
             var loader = loadFXML(MAIN_BODY_FXML);
             buttonBar.setVisible(false);
-            MainBodyController configController = loader.getController();
-            configController.instanciarExportarFortesVO(exportarFortes);
-            configController.setDestinoTextField();
-            configController.dataInicio.setValue(LocalDate.parse(exportarFortes.dataInicio));
-            configController.dataFinal.setValue(LocalDate.parse(exportarFortes.dataTermino));
+            MainBodyController mainBodyController = loader.getController();
+            mainBodyController.instanciarExportarFortesVO(exportarFortes);
+            mainBodyController.setDestinoTextField();
+            mainBodyController.dataInicio.setValue(LocalDate.parse(exportarFortes.dataInicio));
+            mainBodyController.dataFinal.setValue(LocalDate.parse(exportarFortes.dataTermino));
+            mainBodyController.carregarRegistrosComboBox();
+            mainBodyController.carregarLayoutComboBox();
         }
     }
 

@@ -1,18 +1,17 @@
 package br.com.vrfortaleza.integracaoapi.pages;
 
+import atlantafx.base.theme.Styles;
 import br.com.vrfortaleza.integracaoapi.config.AppProperties;
+import br.com.vrfortaleza.integracaoapi.config.Log;
 import br.com.vrfortaleza.integracaoapi.vo.ExportarFortesVO;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import org.controlsfx.control.CheckComboBox;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDate;
 
 public class MainBodyController {
     @FXML
@@ -22,7 +21,11 @@ public class MainBodyController {
     @FXML
     private VBox vBoxPane;
     @FXML
-    private CheckComboBox<String> selecionarCampos;
+    private CheckComboBox<String> registrosComboBox;
+    @FXML
+    private Label layoutLabel;
+    @FXML
+    private ComboBox<String> layoutComboBox;
     @FXML
     private Button selecionarArquivoButton;
     @FXML
@@ -35,6 +38,39 @@ public class MainBodyController {
 
     public void setDestinoTextField() {
         destinoTextField.setText(exportarFortes.caminho);
+    }
+
+    public void carregarRegistrosComboBox() {
+        try {
+            registrosComboBox.getItems().add(0, "PRODUTO");
+            registrosComboBox.getItems().add(1, "PARTICIPANTES");
+            registrosComboBox.getItems().add(2, "NOTA ENTRADA");
+            registrosComboBox.getItems().add(3, "NOTA SAIDA");
+            registrosComboBox.getItems().add(4, "CUPOM FISCAL ELETRONICO");
+            registrosComboBox.getItems().add(5, "INSTR. PAGAMENTO ELETRONICO");
+            registrosComboBox.getItems().add(6, "CARTAO CREDITO/DEBITO");
+            registrosComboBox.getItems().add(7, "INVENTARIO");
+            registrosComboBox.getItems().add(8, "ESTOQUE ESCRITURADO");
+            registrosComboBox.getCheckModel().checkAll();
+            registrosComboBox.getCheckModel().toggleCheckState(7);
+            registrosComboBox.getCheckModel().toggleCheckState(8);
+        } catch (Exception e) {
+            Log.error(this.getClass(), e.getMessage());
+        }
+    }
+
+    public void carregarLayoutComboBox() {
+        try {
+            layoutComboBox.getItems().add(0, "FISCAL 175");
+            layoutComboBox.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
+                boolean newValueNotNull = newValue != null;
+                layoutComboBox.pseudoClassStateChanged(Styles.STATE_SUCCESS, newValueNotNull);
+                layoutLabel.getStyleClass().addAll(Styles.TEXT, Styles.SUCCESS);
+                layoutLabel.setVisible(newValueNotNull);
+            });
+        } catch (Exception e) {
+            Log.error(this.getClass(), e.getMessage());
+        }
     }
 
     @FXML
