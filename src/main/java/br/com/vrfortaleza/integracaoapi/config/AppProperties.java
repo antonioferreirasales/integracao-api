@@ -162,17 +162,20 @@ public class AppProperties {
         try {
             boolean achou = true;
             if (forcePropertiesUserDir) {
-                if (!Arquivo.exists(SistemaOperacional.getHome() + "/.vr/vr.properties"))
+                if (!Arquivo.exists(SistemaOperacional.getHome() + "/.vr/integracao-api/integracao-api.properties"))
                     achou = false;
             } else if (!Arquivo.exists(EnderecosDiretorio.FILE_PROPERTIES)) {
                 achou = false;
             }
             if (!achou) {
-                Log.error(AppProperties.class, "Arquivo de propriedades não encontrado");
+                Log.error(AppProperties.class, "Arquivo de properties não encontrado");
+                Arquivo.mkdir(EnderecosDiretorio.DIRECTORY);
+                Arquivo file = new Arquivo(EnderecosDiretorio.FILE_PROPERTIES, "w");
+                file.close();
+                System.out.println("Arquivo de properties criado em " + EnderecosDiretorio.FILE_PROPERTIES);
             }
         } catch (Exception e) {
             Log.error(AppProperties.class, e.getMessage());
-            System.exit(0);
         }
     }
 

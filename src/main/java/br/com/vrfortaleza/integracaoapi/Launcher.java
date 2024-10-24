@@ -7,10 +7,12 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Locale;
 
 public class Launcher extends Application {
     @Override
     public void start(Stage stage) throws IOException {
+        Locale.setDefault(new Locale("pt", "BR"));
         FXMLLoader loadMainPage = new FXMLLoader(Launcher.class.getResource("pages/main-view.fxml"));
         Application.setUserAgentStylesheet(new PrimerLight().getUserAgentStylesheet());
         Scene scene = new Scene(loadMainPage.load(), 700, 400);

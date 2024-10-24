@@ -16,6 +16,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.layout.Pane;
 import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
+
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -66,8 +67,12 @@ public class MainController implements Initializable {
             MainBodyController mainBodyController = loader.getController();
             mainBodyController.instanciarExportarFortesVO(exportarFortes);
             mainBodyController.setDestinoTextField();
-            mainBodyController.dataInicio.setValue(LocalDate.parse(exportarFortes.dataInicio));
-            mainBodyController.dataFinal.setValue(LocalDate.parse(exportarFortes.dataTermino));
+            if (exportarFortes.dataInicio != null && !exportarFortes.dataInicio.isBlank()) {
+                mainBodyController.dataInicio.setValue(LocalDate.parse(exportarFortes.dataInicio));
+            }
+            if (exportarFortes.dataTermino != null && !exportarFortes.dataTermino.isBlank()) {
+                mainBodyController.dataFinal.setValue(LocalDate.parse(exportarFortes.dataTermino));
+            }
             mainBodyController.carregarRegistrosComboBox();
             mainBodyController.carregarLayoutComboBox();
         }
@@ -105,6 +110,11 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        try {
+            AppProperties.verficarProperties(false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         Log.LEVEL = AppProperties.getString("log.nivel");
         Log.setLogLevel();
         loadInitialConfig();
@@ -116,7 +126,7 @@ public class MainController implements Initializable {
         homeButton.setGraphic(new FontIcon(Feather.SKIP_BACK));
         homeButton.getStyleClass().addAll("button_icon", "accent");
         loadMainBody();
-        Log.info(this.getClass(),"Sistema Operacional: { " + SistemaOperacional.get() + " }");
-        Log.trace(this.getClass(),"Inicializando aplicação");
+        Log.info(this.getClass(), "Sistema Operacional: { " + SistemaOperacional.get() + " }");
+        Log.trace(this.getClass(), "Inicializando aplicação");
     }
 }
