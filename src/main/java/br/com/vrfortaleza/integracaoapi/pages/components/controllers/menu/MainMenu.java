@@ -1,4 +1,4 @@
-package br.com.vrfortaleza.integracaoapi.pages.components.controllers;
+package br.com.vrfortaleza.integracaoapi.pages.components.controllers.menu;
 
 import static javafx.scene.input.KeyCombination.CONTROL_DOWN;
 

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import br.com.vrfortaleza.integracaoapi.pages.components.controllers.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+
+<?import br.com.vrfortaleza.integracaoapi.pages.components.controllers.menu.MainMenu?>
 
 <VBox alignment="CENTER" prefHeight="180.0" prefWidth="614.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.vrfortaleza.integracaoapi.pages.MainController">
   <MainMenu fx:id="mainMenu" onContextMenuRequested="#loadConfigBody">

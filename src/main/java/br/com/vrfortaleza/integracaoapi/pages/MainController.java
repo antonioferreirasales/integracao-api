@@ -2,7 +2,7 @@ package br.com.vrfortaleza.integracaoapi.pages;
 
 import br.com.vrfortaleza.integracaoapi.config.AppProperties;
 import br.com.vrfortaleza.integracaoapi.config.Log;
-import br.com.vrfortaleza.integracaoapi.pages.components.controllers.MainMenu;
+import br.com.vrfortaleza.integracaoapi.pages.components.controllers.menu.MainMenu;
 import br.com.vrfortaleza.integracaoapi.util.SistemaOperacional;
 import br.com.vrfortaleza.integracaoapi.vo.ExportarFortesVO;
 import javafx.application.Platform;
@@ -81,8 +81,9 @@ public class MainController implements Initializable {
     @FXML
     public void loadConfigBody() {
         if (!isCurrentLoader(CONFIG_VIEW_FXML)) {
-            loadFXML(CONFIG_VIEW_FXML);
+            var loader = loadFXML(CONFIG_VIEW_FXML);
             buttonBar.setVisible(true);
+            ConfigController configController = loader.getController();
         }
     }
 

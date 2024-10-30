@@ -1,10 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import br.com.vrfortaleza.integracaoapi.pages.components.controllers.menu.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
+<?import br.com.vrfortaleza.integracaoapi.pages.components.controllers.tables.LojaConfigTable?>
 <TabPane fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="347.0" prefWidth="684.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.vrfortaleza.integracaoapi.pages.ConfigController">
     <tabs>
-        <Tab fx:id="lojaTab" closable="false" text="Loja" />
+        <Tab fx:id="lojaTab" closable="false" text="Loja">
+         <content>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <CustomToolBar fx:id="customToolBar" prefHeight="40.0" prefWidth="200.0" />
+                  <LojaConfigTable fx:id="lojaConfigTable" prefHeight="271.0" prefWidth="684.0">
+                  </LojaConfigTable>
+               </children></VBox>
+         </content>
+        </Tab>
         <Tab fx:id="invetarioTab" closable="false" text="Inventário" />
     </tabs>
 </TabPane>

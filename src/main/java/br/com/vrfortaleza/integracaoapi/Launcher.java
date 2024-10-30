@@ -15,7 +15,7 @@ public class Launcher extends Application {
         Locale.setDefault(new Locale("pt", "BR"));
         FXMLLoader loadMainPage = new FXMLLoader(Launcher.class.getResource("pages/main-view.fxml"));
         Application.setUserAgentStylesheet(new PrimerLight().getUserAgentStylesheet());
-        Scene scene = new Scene(loadMainPage.load(), 700, 400);
+        Scene scene = new Scene(loadMainPage.load(), 700, 450);
         stage.setResizable(false);
         stage.setTitle("Integração API");
         stage.setScene(scene);
