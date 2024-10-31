@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import br.com.vrfortaleza.integracaoapi.config.Log;
 import lombok.Getter;
 
 public class Arquivo {
@@ -123,13 +125,11 @@ public class Arquivo {
         return i_arquivo.delete();
     }
 
-    public static void mkdir(String i_diretorio) {
-        try {
+    public static void mkdir(String i_diretorio) throws IOException {
             File file = new File(i_diretorio);
-            file.mkdirs();
-        } catch (Exception ignored) {
-
-        }
+            if (!file.mkdirs() && !file.isDirectory()) {
+                throw new IOException("Não foi possível criar o diretório: " + i_diretorio);
+            }
     }
 
     public static byte[] readBytes(String i_arquivo) throws Exception {

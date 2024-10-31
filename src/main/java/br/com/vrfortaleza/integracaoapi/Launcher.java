@@ -1,6 +1,7 @@
 package br.com.vrfortaleza.integracaoapi;
 
 import atlantafx.base.theme.PrimerLight;
+import br.com.vrfortaleza.integracaoapi.database.Service;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -10,6 +11,7 @@ import java.io.IOException;
 import java.util.Locale;
 
 public class Launcher extends Application {
+    private final Service createDB = new Service();
     @Override
     public void start(Stage stage) throws IOException {
         Locale.setDefault(new Locale("pt", "BR"));
@@ -20,6 +22,7 @@ public class Launcher extends Application {
         stage.setTitle("Integração API");
         stage.setScene(scene);
         stage.show();
+        createDB.create();
     }
 
     public static void main(String[] args) {

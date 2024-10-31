@@ -11,6 +11,7 @@ module br.com.vrfortaleza.integracaoapi {
     requires static lombok;
     requires org.slf4j.simple;
     requires org.slf4j;
+    requires org.xerial.sqlitejdbc;
 
     opens br.com.vrfortaleza.integracaoapi.pages to javafx.fxml;
     opens br.com.vrfortaleza.integracaoapi.pages.components.controllers to javafx.fxml;
@@ -20,5 +21,6 @@ module br.com.vrfortaleza.integracaoapi {
     exports br.com.vrfortaleza.integracaoapi.pages.components.controllers.menu;
     exports br.com.vrfortaleza.integracaoapi.pages.components.controllers.tables;
     exports br.com.vrfortaleza.integracaoapi.vo;
+    exports br.com.vrfortaleza.integracaoapi.database;
     opens br.com.vrfortaleza.integracaoapi.pages.components.controllers.menu to javafx.fxml;
 }
