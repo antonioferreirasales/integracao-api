@@ -23,4 +23,5 @@ module br.com.vrfortaleza.integracaoapi {
     exports br.com.vrfortaleza.integracaoapi.vo;
     exports br.com.vrfortaleza.integracaoapi.database;
     opens br.com.vrfortaleza.integracaoapi.pages.components.controllers.menu to javafx.fxml;
+    exports br.com.vrfortaleza.integracaoapi.database.schemas;
 }

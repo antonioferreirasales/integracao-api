@@ -1,9 +1,10 @@
 package br.com.vrfortaleza.integracaoapi.pages;
 
 import br.com.vrfortaleza.integracaoapi.config.Log;
-import br.com.vrfortaleza.integracaoapi.interfaces.exportacao.FortesDAO;
+import br.com.vrfortaleza.integracaoapi.database.Service;
 import br.com.vrfortaleza.integracaoapi.pages.components.controllers.menu.CustomToolBar;
 import br.com.vrfortaleza.integracaoapi.pages.components.controllers.tables.LojaConfigTable;
+import br.com.vrfortaleza.integracaoapi.vo.FortesConfiguracaoLojaVO;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Tab;
@@ -11,11 +12,8 @@ import javafx.scene.control.TabPane;
 import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
 
-import java.io.IOException;
 import java.net.URL;
-import java.util.HashSet;
 import java.util.ResourceBundle;
-import java.util.Set;
 
 public class ConfigController implements Initializable {
     @FXML
@@ -28,23 +26,32 @@ public class ConfigController implements Initializable {
     private CustomToolBar customToolBar;
     @FXML
     private LojaConfigTable lojaConfigTable;
-    private FortesDAO fortesDAO;
+    private final Service dbService = new Service();
 
     private void setTable() {
-        fortesDAO = new FortesDAO();
-//      configura botão de salvar
+//        Carrega as tabelas
+        lojaConfigTable.loadLojas(dbService.selectLojas());
+//        Configura botão de salvar
         customToolBar.getSalvarButton().setOnAction(event -> {
             try {
-                fortesDAO.salvarParametrosConfiguracao(lojaConfigTable.getFortesConfiguracao());
-            } catch (IOException e) {
+                dbService.updateLoja(lojaConfigTable.getFortesConfiguracao());
+            } catch (Exception e) {
                 Log.error(this.getClass(), e.getMessage());
             }
         });
-        Set<Integer> numberOfLojas = new HashSet<>();
-        numberOfLojas.add(1);
-        var lojas = fortesDAO.carregarParametrosConfiguracao(numberOfLojas);
-        lojaConfigTable.loadLojas(lojas);
-        customToolBar.getCriarButton().setOnAction(e -> lojaConfigTable.adicionarLoja());
+//        Configura botão de criar
+        customToolBar.getCriarButton().setOnAction(e -> {
+            int lojaID = dbService.getMaxId() + 1;
+            var novaLoja = new FortesConfiguracaoLojaVO(lojaID, "", "", "xxxxx", "000" + lojaID, 1, 0);
+            dbService.insertLoja(novaLoja);
+            lojaConfigTable.loadLojas(dbService.selectLojas());
+        });
+//        Configura botão de excluir
+        customToolBar.getExcluirButton().setOnAction(e -> {
+            var loja = lojaConfigTable.getSelectionModel().getSelectedItem();
+            dbService.deleteLoja(loja.idLoja);
+            lojaConfigTable.loadLojas(dbService.selectLojas());
+        });
     }
 
     @Override

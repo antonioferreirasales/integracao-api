@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+@Deprecated
 public class FortesDAO {
     public void salvarParametrosConfiguracao(FortesConfiguracaoLojaVO configuracao) throws IOException {
             AppProperties.setProperty("loja" + configuracao.idLoja + ".id", configuracao.idLoja);

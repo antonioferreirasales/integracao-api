@@ -24,6 +24,7 @@ public class LojaConfigTable extends TableView<FortesConfiguracaoLojaVO> {
         cLojaId.setCellValueFactory(cellData -> cellData.getValue().idLojaProperty());
         cLojaId.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
         cLojaId.setOnEditCommit(event -> event.getRowValue().setIdLoja(event.getNewValue()));
+        cLojaId.setEditable(false);
 
         cLojaNome.setCellFactory(TextFieldTableCell.forTableColumn());
         cLojaNome.setCellValueFactory(cellData -> cellData.getValue().lojaProperty());
@@ -61,14 +62,16 @@ public class LojaConfigTable extends TableView<FortesConfiguracaoLojaVO> {
     }
 
     public void loadLojas(Set<FortesConfiguracaoLojaVO> lojas) {
+        this.getItems().clear();
         for (var loja : lojas) {
             this.getItems().add(loja);
         }
     }
 
-    public void adicionarLoja() {
+    @Deprecated
+    public void adicionarLoja(FortesConfiguracaoLojaVO fortesConfiguracaoLojaVO) {
         var row = new FortesConfiguracaoLojaVO(1, "", "", "", "", 0, 0);
-        this.getItems().add(row);
+        this.getItems().add(fortesConfiguracaoLojaVO);
     }
 
     public LojaConfigTable() {
