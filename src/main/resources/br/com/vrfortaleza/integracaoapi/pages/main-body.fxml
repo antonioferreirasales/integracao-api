@@ -1,36 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import br.com.vrfortaleza.integracaoapi.pages.components.controllers.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import org.controlsfx.control.*?>
+<?import br.com.vrfortaleza.integracaoapi.pages.components.controllers.ExportarButton?>
+<?import br.com.vrfortaleza.integracaoapi.pages.components.controllers.SelecionarArquivoButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import org.controlsfx.control.CheckComboBox?>
 
-<VBox fx:id="vBoxPane" prefHeight="347.0" prefWidth="684.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.vrfortaleza.integracaoapi.pages.MainBodyController">
+<VBox fx:id="vBoxPane" prefHeight="347.0" prefWidth="684.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.vrfortaleza.integracaoapi.pages.MainBodyController">
         <children>
             <AnchorPane prefHeight="200.0" prefWidth="200.0">
                 <children>
-                    <ComboBox fx:id="tipoDataComboBox" layoutY="47.0" prefHeight="36.0" prefWidth="115.0" />
-                    <DatePicker fx:id="dataInicio" layoutX="149.0" layoutY="47.0" onAction="#setDataInicial" promptText="Inicial" />
-                    <DatePicker fx:id="dataFinal" layoutX="381.0" layoutY="47.0" onAction="#setDataFinal" promptText="Final" />
-                    <Label layoutX="-2.0" layoutY="27.0" text="Data" />
+                    <ComboBox fx:id="tipoDataComboBox" layoutX="25.0" layoutY="47.0" prefHeight="36.0" prefWidth="115.0" />
+                    <DatePicker fx:id="dataInicio" layoutX="181.0" layoutY="47.0" onAction="#setDataInicial" promptText="Inicial" />
+                    <DatePicker fx:id="dataFinal" layoutX="422.0" layoutY="47.0" onAction="#setDataFinal" promptText="Final" />
+                    <Label layoutX="25.0" layoutY="27.0" text="Data" />
                 </children>
             </AnchorPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0">
                 <children>
-                    <ComboBox fx:id="lojaComboBox" layoutY="18.0" prefHeight="36.0" prefWidth="115.0" />
-                    <CheckComboBox fx:id="registrosComboBox" layoutX="153.0" layoutY="18.0" prefHeight="20.0" prefWidth="227.0" showCheckedCount="true" title="Registros" />
-                    <ComboBox fx:id="layoutComboBox" layoutX="425.0" layoutY="18.0" prefWidth="150.0" promptText="Layout" />
-                    <Label layoutX="-2.0" text="Loja" />
-            <Label fx:id="layoutLabel" layoutX="425.0" text="Layout" visible="false" />
+                    <ComboBox fx:id="lojaComboBox" layoutX="24.0" layoutY="18.0" prefHeight="36.0" prefWidth="115.0" />
+                    <CheckComboBox fx:id="registrosComboBox" layoutX="180.0" layoutY="18.0" prefHeight="36.0" prefWidth="217.0" showCheckedCount="true" title="Registros" />
+                    <ComboBox fx:id="layoutComboBox" layoutX="491.0" layoutY="18.0" prefHeight="36.0" prefWidth="146.0" promptText="Layout" />
+                    <Label layoutX="24.0" text="Loja" />
+            <Label fx:id="layoutLabel" layoutX="491.0" text="Layout" visible="false" />
                 </children>
             </AnchorPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0">
                 <children>
-                    <SelecionarArquivoButton fx:id="selecionarArquivoButton" layoutX="391.0" layoutY="30.0" onAction="#selecionarArquivo" prefHeight="36.0" prefWidth="50.0" />
-                    <TextField fx:id="destinoTextField" layoutY="32.0" prefHeight="32.0" prefWidth="376.0" />
-                    <Label layoutY="14.0" text="Destino" />
-                    <ExportarButton layoutX="465.0" layoutY="30.0" mnemonicParsing="false" onAction="#exportar" prefHeight="36.0" prefWidth="104.0" text="Exportar" />
+                    <SelecionarArquivoButton fx:id="selecionarArquivoButton" layoutX="454.0" layoutY="30.0" onAction="#selecionarArquivo" prefHeight="40.0" prefWidth="48.0" />
+                    <TextField fx:id="destinoTextField" layoutX="24.0" layoutY="30.0" prefHeight="40.0" prefWidth="380.0" />
+                    <Label layoutX="24.0" layoutY="14.0" text="Destino" />
+                    <ExportarButton layoutX="519.0" layoutY="30.0" mnemonicParsing="false" onAction="#exportar" prefHeight="40.0" prefWidth="104.0" text="Exportar" />
                 </children>
             </AnchorPane>
         </children>
