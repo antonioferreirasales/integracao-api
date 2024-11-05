@@ -23,9 +23,9 @@ public class MainBodyController {
     @FXML
     private VBox vBoxPane;
     @FXML
-    private ComboBox<String> lojaComboBox;
-    @FXML
     private ComboBox<String> tipoDataComboBox;
+    @FXML
+    private ComboBox<String> lojaComboBox;
     @FXML
     private CheckComboBox<String> registrosComboBox;
     @FXML
@@ -33,9 +33,9 @@ public class MainBodyController {
     @FXML
     private ComboBox<String> layoutComboBox;
     @FXML
-    private Button selecionarArquivoButton;
-    @FXML
     private TextField destinoTextField;
+    @FXML
+    private Button selecionarArquivoButton;
     private ExportarFortesVO exportarFortes;
 
     public void instanciarExportarFortesVO(ExportarFortesVO exportarFortesObj) {
@@ -45,12 +45,25 @@ public class MainBodyController {
     public void setDestinoTextField() {
         destinoTextField.setText(exportarFortes.caminho);
     }
-
+// Carrega ComboBoxes
     public void carregarTipoDataComboBox() {
         try {
             tipoDataComboBox.getItems().add(0, "EMISSAO");
             tipoDataComboBox.getItems().add(1, "ENTRADA");
             tipoDataComboBox.getSelectionModel().select(1);
+        } catch (Exception e) {
+            Log.error(this.getClass(), e.getMessage());
+        }
+    }
+
+    public void carregarLojaComboBox() {
+        try {
+            var fortesDAO = new FortesDAO();
+            FortesConfiguracaoVO configuracaoLoja = fortesDAO.carregarConfiguracaoLoja();
+            for (var loja : configuracaoLoja.vLoja) {
+                lojaComboBox.getItems().add("Loja " + loja.idLoja);
+            }
+            lojaComboBox.getSelectionModel().selectFirst();
         } catch (Exception e) {
             Log.error(this.getClass(), e.getMessage());
         }
@@ -70,19 +83,6 @@ public class MainBodyController {
             registrosComboBox.getCheckModel().checkAll();
             registrosComboBox.getCheckModel().toggleCheckState(7);
             registrosComboBox.getCheckModel().toggleCheckState(8);
-        } catch (Exception e) {
-            Log.error(this.getClass(), e.getMessage());
-        }
-    }
-
-    public void carregarLojaComboBox() {
-        try {
-            var fortesDAO = new FortesDAO();
-            FortesConfiguracaoVO configuracaoLoja = fortesDAO.carregarConfiguracaoLoja();
-            for (var loja : configuracaoLoja.vLoja) {
-                lojaComboBox.getItems().add("Loja " + loja.idLoja);
-            }
-            lojaComboBox.getSelectionModel().selectFirst();
         } catch (Exception e) {
             Log.error(this.getClass(), e.getMessage());
         }

@@ -73,10 +73,10 @@ public class MainController implements Initializable {
             if (exportarFortes.dataTermino != null && !exportarFortes.dataTermino.isBlank()) {
                 mainBodyController.dataFinal.setValue(LocalDate.parse(exportarFortes.dataTermino));
             }
+            mainBodyController.carregarTipoDataComboBox();
+            mainBodyController.carregarLojaComboBox();
             mainBodyController.carregarRegistrosComboBox();
             mainBodyController.carregarLayoutComboBox();
-            mainBodyController.carregarLojaComboBox();
-            mainBodyController.carregarTipoDataComboBox();
         }
     }
 
