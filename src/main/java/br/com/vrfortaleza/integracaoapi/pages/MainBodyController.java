@@ -2,6 +2,7 @@ package br.com.vrfortaleza.integracaoapi.pages;
 
 import br.com.vrfortaleza.integracaoapi.config.AppProperties;
 import br.com.vrfortaleza.integracaoapi.config.Log;
+import br.com.vrfortaleza.integracaoapi.controller.interfaces.exportacao.fortes.ExportacaoFortesController;
 import br.com.vrfortaleza.integracaoapi.dao.interfaces.exportacao.fortes.FortesDAO;
 import br.com.vrfortaleza.integracaoapi.vo.ExportarFortesVO;
 import br.com.vrfortaleza.integracaoapi.vo.FortesConfiguracaoVO;
@@ -129,7 +130,7 @@ public class MainBodyController {
     }
 
     @FXML
-    public void exportar() {
+    public void exportar() throws Exception {
         exportarFortes.idLoja = Integer.parseInt(lojaComboBox.getSelectionModel().getSelectedItem().split(" ")[1]);
         exportarFortes.caminho = destinoTextField.getText();
         exportarFortes.tipoData = tipoDataComboBox.getSelectionModel().getSelectedIndex() + 1;
@@ -145,7 +146,8 @@ public class MainBodyController {
         exportarFortes.inventario = registrosComboBox.getCheckModel().isChecked(7);
         exportarFortes.estoqueEscriturado = registrosComboBox.getCheckModel().isChecked(8);
         if (Integer.parseInt(layoutComboBox.getSelectionModel().getSelectedItem().split(" ")[1]) == 175) {
-            System.out.println("Exportando layout 175");
+            new ExportacaoFortesController().exportar(exportarFortes);
+            System.out.println("Gerado arquivo Fortes 175");
         } else {
             throw new InvalidParameterException("Layout inválido");
         }

@@ -7,6 +7,7 @@ import br.com.vrfortaleza.integracaoapi.vo.FortesConfiguracaoVO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class FortesDAO {
     private final Connection conn = API.connect();
@@ -32,5 +33,27 @@ public class FortesDAO {
             Log.error(this.getClass(), e.getMessage());
         }
         return configuracao;
+    }
+
+    public FortesConfiguracaoLojaVO carregarLoja(int idLoja) {
+        String sql = "SELECT * FROM lojas WHERE id = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, idLoja);
+            var rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return new FortesConfiguracaoLojaVO(
+                        rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getString("token"),
+                        rs.getString("codigoempresa"),
+                        rs.getString("codigoestabelecimento"),
+                        rs.getInt("codigoincidencia"),
+                        rs.getInt("aliquotasespecificas")
+                );
+            }
+        } catch (SQLException e) {
+            Log.error(this.getClass(), e.getMessage());
+        }
+        return null;
     }
 }
