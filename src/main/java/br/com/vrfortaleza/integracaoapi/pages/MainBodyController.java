@@ -3,7 +3,9 @@ package br.com.vrfortaleza.integracaoapi.pages;
 import atlantafx.base.theme.Styles;
 import br.com.vrfortaleza.integracaoapi.config.AppProperties;
 import br.com.vrfortaleza.integracaoapi.config.Log;
+import br.com.vrfortaleza.integracaoapi.interfaces.exportacao.FortesDAO;
 import br.com.vrfortaleza.integracaoapi.vo.ExportarFortesVO;
+import br.com.vrfortaleza.integracaoapi.vo.FortesConfiguracaoVO;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
@@ -23,6 +25,8 @@ public class MainBodyController {
     @FXML
     private CheckComboBox<String> registrosComboBox;
     @FXML
+    private ComboBox<String> lojaComboBox;
+    @FXML
     private Label layoutLabel;
     @FXML
     private ComboBox<String> layoutComboBox;
@@ -32,7 +36,7 @@ public class MainBodyController {
     private TextField destinoTextField;
     private ExportarFortesVO exportarFortes;
 
-    public void instanciarExportarFortesVO( ExportarFortesVO exportarFortesObj ) {
+    public void instanciarExportarFortesVO(ExportarFortesVO exportarFortesObj) {
         exportarFortes = exportarFortesObj;
     }
 
@@ -54,6 +58,19 @@ public class MainBodyController {
             registrosComboBox.getCheckModel().checkAll();
             registrosComboBox.getCheckModel().toggleCheckState(7);
             registrosComboBox.getCheckModel().toggleCheckState(8);
+        } catch (Exception e) {
+            Log.error(this.getClass(), e.getMessage());
+        }
+    }
+
+    public void carregarLojaComboBox() {
+        try {
+            var fortesDAO = new FortesDAO();
+            FortesConfiguracaoVO configuracaoLoja = fortesDAO.carregarConfiguracaoLoja();
+            for (var loja : configuracaoLoja.vLoja) {
+                lojaComboBox.getItems().add("Loja " + loja.idLoja);
+            }
+            lojaComboBox.getSelectionModel().selectFirst();
         } catch (Exception e) {
             Log.error(this.getClass(), e.getMessage());
         }
@@ -86,11 +103,13 @@ public class MainBodyController {
             setDestinoTextField();
         }
     }
+
     @FXML
     private void setDataInicial() throws IOException {
-            exportarFortes.dataInicio = dataInicio.getValue().toString();
-            AppProperties.setProperty("exportar.dataInicio", exportarFortes.dataInicio);
+        exportarFortes.dataInicio = dataInicio.getValue().toString();
+        AppProperties.setProperty("exportar.dataInicio", exportarFortes.dataInicio);
     }
+
     @FXML
     private void setDataFinal() throws IOException {
         exportarFortes.dataTermino = dataFinal.getValue().toString();

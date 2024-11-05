@@ -18,7 +18,7 @@
             </AnchorPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0">
                 <children>
-                    <ChoiceBox layoutY="18.0" prefHeight="36.0" prefWidth="115.0" />
+                    <ComboBox fx:id="lojaComboBox" layoutY="18.0" prefHeight="36.0" prefWidth="115.0" />
                     <CheckComboBox fx:id="registrosComboBox" layoutX="153.0" layoutY="18.0" prefHeight="20.0" prefWidth="227.0" showCheckedCount="true" title="Registros" />
                     <ComboBox fx:id="layoutComboBox" layoutX="425.0" layoutY="18.0" prefWidth="150.0" promptText="Layout" />
                     <Label layoutX="-2.0" text="Loja" />

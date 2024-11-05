@@ -1,37 +1,36 @@
 package br.com.vrfortaleza.integracaoapi.interfaces.exportacao;
 
-import br.com.vrfortaleza.integracaoapi.config.AppProperties;
+import br.com.vrfortaleza.integracaoapi.config.Log;
+import br.com.vrfortaleza.integracaoapi.database.API;
 import br.com.vrfortaleza.integracaoapi.vo.FortesConfiguracaoLojaVO;
+import br.com.vrfortaleza.integracaoapi.vo.FortesConfiguracaoVO;
 
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 
-@Deprecated
 public class FortesDAO {
-    public void salvarParametrosConfiguracao(FortesConfiguracaoLojaVO configuracao) throws IOException {
-            AppProperties.setProperty("loja" + configuracao.idLoja + ".id", configuracao.idLoja);
-            AppProperties.setProperty("loja" + configuracao.idLoja + ".nome", configuracao.loja);
-            AppProperties.setProperty("loja" + configuracao.idLoja + ".token", configuracao.token);
-            AppProperties.setProperty("loja" + configuracao.idLoja + ".empresa", configuracao.codigoEmpresa);
-            AppProperties.setProperty("loja" + configuracao.idLoja + ".estabelecimento", configuracao.codigoEstabelecimento);
-            AppProperties.setProperty("loja" + configuracao.idLoja + ".incidencia", configuracao.codigoIncidencia);
-            AppProperties.setProperty("loja" + configuracao.idLoja + ".aliquotas", configuracao.aliquotasEspecificas);
-    }
+    private final Connection conn = API.connect();
 
-    public Set<FortesConfiguracaoLojaVO> carregarParametrosConfiguracao(Set<Integer> lojas) {
-        Set<FortesConfiguracaoLojaVO> lojasParams = new HashSet<>();
-        for (var loja : lojas) {
-            FortesConfiguracaoLojaVO configuracao = new FortesConfiguracaoLojaVO();
-            configuracao.idLoja = AppProperties.getInt("loja" + loja + ".id");
-            configuracao.loja = AppProperties.getString("loja" + loja + ".nome");
-            configuracao.token = AppProperties.getString("loja" + loja + ".token");
-            configuracao.codigoEmpresa = AppProperties.getString("loja" + loja + ".empresa");
-            configuracao.codigoEstabelecimento = AppProperties.getString("loja" + loja + ".estabelecimento");
-            configuracao.codigoIncidencia = AppProperties.getInt("loja" + loja + ".incidencia");
-            configuracao.aliquotasEspecificas = AppProperties.getInt("loja" + loja + ".aliquotas");
-            lojasParams.add(configuracao);
+    public FortesConfiguracaoVO carregarConfiguracaoLoja() {
+        String sql = "SELECT id, nome, token, codigoempresa, codigoestabelecimento, codigoincidencia, aliquotasespecificas" +
+                " FROM lojas";
+        FortesConfiguracaoVO configuracao = new FortesConfiguracaoVO();
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            var rs = pstmt.executeQuery();
+            while (rs.next()) {
+                var oloja = new FortesConfiguracaoLojaVO();
+                oloja.idLoja = rs.getInt("id");
+                oloja.loja = rs.getString("nome");
+                oloja.token = rs.getString("token");
+                oloja.codigoEmpresa = rs.getString("codigoempresa");
+                oloja.codigoEstabelecimento = rs.getString("codigoestabelecimento");
+                oloja.codigoIncidencia = rs.getInt("codigoincidencia");
+                oloja.aliquotasEspecificas = rs.getInt("aliquotasespecificas");
+                configuracao.vLoja.add(oloja);
+            }
+        } catch (Exception e) {
+            Log.error(this.getClass(), e.getMessage());
         }
-        return lojasParams;
+        return configuracao;
     }
 }
