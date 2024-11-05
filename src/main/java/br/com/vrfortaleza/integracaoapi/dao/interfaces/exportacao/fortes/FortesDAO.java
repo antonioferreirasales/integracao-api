@@ -1,4 +1,4 @@
-package br.com.vrfortaleza.integracaoapi.interfaces.exportacao;
+package br.com.vrfortaleza.integracaoapi.dao.interfaces.exportacao.fortes;
 
 import br.com.vrfortaleza.integracaoapi.config.Log;
 import br.com.vrfortaleza.integracaoapi.database.API;

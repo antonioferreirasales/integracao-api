@@ -1,9 +1,8 @@
 package br.com.vrfortaleza.integracaoapi.pages;
 
-import atlantafx.base.theme.Styles;
 import br.com.vrfortaleza.integracaoapi.config.AppProperties;
 import br.com.vrfortaleza.integracaoapi.config.Log;
-import br.com.vrfortaleza.integracaoapi.interfaces.exportacao.FortesDAO;
+import br.com.vrfortaleza.integracaoapi.dao.interfaces.exportacao.fortes.FortesDAO;
 import br.com.vrfortaleza.integracaoapi.vo.ExportarFortesVO;
 import br.com.vrfortaleza.integracaoapi.vo.FortesConfiguracaoVO;
 import javafx.fxml.FXML;
