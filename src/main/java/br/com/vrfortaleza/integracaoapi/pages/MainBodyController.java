@@ -14,6 +14,7 @@ import org.controlsfx.control.CheckComboBox;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.InvalidParameterException;
 
 public class MainBodyController {
     @FXML
@@ -45,7 +46,8 @@ public class MainBodyController {
     public void setDestinoTextField() {
         destinoTextField.setText(exportarFortes.caminho);
     }
-// Carrega ComboBoxes
+
+    // Carrega ComboBoxes
     public void carregarTipoDataComboBox() {
         try {
             tipoDataComboBox.getItems().add(0, "EMISSAO");
@@ -93,10 +95,9 @@ public class MainBodyController {
             layoutComboBox.getItems().add(0, "FISCAL 175");
             layoutComboBox.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
                 boolean newValueNotNull = newValue != null;
-                layoutComboBox.pseudoClassStateChanged(Styles.STATE_SUCCESS, newValueNotNull);
-                layoutLabel.getStyleClass().addAll(Styles.TEXT, Styles.SUCCESS);
                 layoutLabel.setVisible(newValueNotNull);
             });
+            layoutComboBox.getSelectionModel().selectFirst();
         } catch (Exception e) {
             Log.error(this.getClass(), e.getMessage());
         }
@@ -129,7 +130,25 @@ public class MainBodyController {
     }
 
     @FXML
-    private void buttonClicked() {
-        System.out.println("Exportar");
+    public void exportar() {
+        exportarFortes.idLoja = Integer.parseInt(lojaComboBox.getSelectionModel().getSelectedItem().split(" ")[1]);
+        exportarFortes.caminho = destinoTextField.getText();
+        exportarFortes.tipoData = tipoDataComboBox.getSelectionModel().getSelectedIndex() + 1;
+        exportarFortes.dataTermino = dataFinal.getValue().toString();
+        exportarFortes.dataInicio = dataInicio.getValue().toString();
+        exportarFortes.produto = registrosComboBox.getCheckModel().isChecked(0);
+        exportarFortes.participantes = registrosComboBox.getCheckModel().isChecked(1);
+        exportarFortes.notaEntrada = registrosComboBox.getCheckModel().isChecked(2);
+        exportarFortes.notaSaida = registrosComboBox.getCheckModel().isChecked(3);
+        exportarFortes.cupomFiscalEletronico = registrosComboBox.getCheckModel().isChecked(4);
+        exportarFortes.instrPagamentoEletronico = registrosComboBox.getCheckModel().isChecked(5);
+        exportarFortes.operacaoCreditoDebito = registrosComboBox.getCheckModel().isChecked(6);
+        exportarFortes.inventario = registrosComboBox.getCheckModel().isChecked(7);
+        exportarFortes.estoqueEscriturado = registrosComboBox.getCheckModel().isChecked(8);
+        if (Integer.parseInt(layoutComboBox.getSelectionModel().getSelectedItem().split(" ")[1]) == 175) {
+            System.out.println("Exportando layout 175");
+        } else {
+            throw new InvalidParameterException("Layout inválido");
+        }
     }
 }
