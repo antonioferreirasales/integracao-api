@@ -1,5 +1,6 @@
 package br.com.vrfortaleza.integracaoapi.services.interfaces.exportacao.fortes;
 
+import br.com.vrfortaleza.integracaoapi.config.Log;
 import br.com.vrfortaleza.integracaoapi.dao.interfaces.exportacao.fortes.FortesDAO;
 import br.com.vrfortaleza.integracaoapi.util.Arquivo;
 import br.com.vrfortaleza.integracaoapi.vo.ExportarFortesVO;
@@ -7,6 +8,7 @@ import br.com.vrfortaleza.integracaoapi.vo.TipoSimNao;
 import br.com.vrfortaleza.integracaoapi.vo.fortes.registros.FortesCABVO;
 import br.com.vrfortaleza.integracaoapi.vo.fortes.registros.FortesTRAVO;
 
+import java.nio.file.Paths;
 import java.security.InvalidParameterException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,8 +22,9 @@ public class Fortes175Service {
         if (configuracao == null) {
             throw new InvalidParameterException("Loja não encontrada");
         }
-        String caminhoArquivo = exportacao.caminho + "Fortes_loja" + idLoja + ".fs";
-        System.out.println("Exportando arquivo: " + caminhoArquivo);
+
+        String caminhoArquivo = Paths.get(exportacao.caminho, "Fortes_loja" + idLoja + ".fs").toString();
+        Log.info( this.getClass(), "Exportando arquivo: " + caminhoArquivo);
         Arquivo arquivo = new Arquivo(caminhoArquivo, "w", "windows-1252");
         exportacao.qtdRegistro = 0;
 
