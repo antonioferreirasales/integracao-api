@@ -23,9 +23,11 @@ public class MainBodyController {
     @FXML
     private VBox vBoxPane;
     @FXML
-    private CheckComboBox<String> registrosComboBox;
-    @FXML
     private ComboBox<String> lojaComboBox;
+    @FXML
+    private ComboBox<String> tipoDataComboBox;
+    @FXML
+    private CheckComboBox<String> registrosComboBox;
     @FXML
     private Label layoutLabel;
     @FXML
@@ -42,6 +44,16 @@ public class MainBodyController {
 
     public void setDestinoTextField() {
         destinoTextField.setText(exportarFortes.caminho);
+    }
+
+    public void carregarTipoDataComboBox() {
+        try {
+            tipoDataComboBox.getItems().add(0, "EMISSAO");
+            tipoDataComboBox.getItems().add(1, "ENTRADA");
+            tipoDataComboBox.getSelectionModel().select(1);
+        } catch (Exception e) {
+            Log.error(this.getClass(), e.getMessage());
+        }
     }
 
     public void carregarRegistrosComboBox() {

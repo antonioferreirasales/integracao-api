@@ -10,7 +10,7 @@
         <children>
             <AnchorPane prefHeight="200.0" prefWidth="200.0">
                 <children>
-                    <ChoiceBox layoutY="47.0" prefHeight="36.0" prefWidth="115.0" />
+                    <ComboBox fx:id="tipoDataComboBox" layoutY="47.0" prefHeight="36.0" prefWidth="115.0" />
                     <DatePicker fx:id="dataInicio" layoutX="149.0" layoutY="47.0" onAction="#setDataInicial" promptText="Inicial" />
                     <DatePicker fx:id="dataFinal" layoutX="381.0" layoutY="47.0" onAction="#setDataFinal" promptText="Final" />
                     <Label layoutX="-2.0" layoutY="27.0" text="Data" />

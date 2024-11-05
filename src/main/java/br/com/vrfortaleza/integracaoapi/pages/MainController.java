@@ -76,6 +76,7 @@ public class MainController implements Initializable {
             mainBodyController.carregarRegistrosComboBox();
             mainBodyController.carregarLayoutComboBox();
             mainBodyController.carregarLojaComboBox();
+            mainBodyController.carregarTipoDataComboBox();
         }
     }
 
