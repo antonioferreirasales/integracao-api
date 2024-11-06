@@ -34,6 +34,7 @@ public class MainController implements Initializable {
     private Button homeButton;
     @FXML
     private MainMenu mainMenu;
+    private MenuItem exportarMenu;
     private ExportarFortesVO exportarFortes;
 
     private void loadInitialConfig() {
@@ -77,6 +78,13 @@ public class MainController implements Initializable {
             mainBodyController.carregarLojaComboBox();
             mainBodyController.carregarRegistrosComboBox();
             mainBodyController.carregarLayoutComboBox();
+            exportarMenu.setOnAction(event -> {
+                try {
+                    mainBodyController.exportar();
+                } catch (Exception e) {
+                    Log.error(this.getClass(), e.getMessage());
+                }
+            });
         }
     }
 
@@ -121,7 +129,7 @@ public class MainController implements Initializable {
         Log.LEVEL = AppProperties.getString("log.nivel");
         Log.setLogLevel();
         loadInitialConfig();
-        MenuItem exportarMenu = mainMenu.findMenuItemByName(mainMenu.findMenuByName("_Sistema"), "_Exportar");
+        exportarMenu = mainMenu.findMenuItemByName(mainMenu.findMenuByName("_Sistema"), "_Exportar");
         MenuItem configuracoesMenu = mainMenu.findMenuItemByName(mainMenu.findMenuByName("_Sistema"), "Configuração");
         MenuItem sairMenu = mainMenu.findMenuItemByName(mainMenu.findMenuByName("_Sistema"), "Sair");
         configuracoesMenu.setOnAction(event -> loadConfigBody());
