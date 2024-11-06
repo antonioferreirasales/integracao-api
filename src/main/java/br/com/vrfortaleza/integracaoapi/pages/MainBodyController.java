@@ -6,11 +6,13 @@ import br.com.vrfortaleza.integracaoapi.controller.interfaces.exportacao.fortes.
 import br.com.vrfortaleza.integracaoapi.dao.interfaces.exportacao.fortes.FortesDAO;
 import br.com.vrfortaleza.integracaoapi.vo.ExportarFortesVO;
 import br.com.vrfortaleza.integracaoapi.vo.FortesConfiguracaoVO;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import org.controlsfx.control.CheckComboBox;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -150,11 +152,39 @@ public class MainBodyController {
         exportarFortes.inventario = registrosComboBox.getCheckModel().isChecked(7);
         exportarFortes.estoqueEscriturado = registrosComboBox.getCheckModel().isChecked(8);
         if (Integer.parseInt(layoutComboBox.getSelectionModel().getSelectedItem().split(" ")[1]) == 175) {
+            exportarButton.setDisable(true);
+
             progressBar.setProgress(0);
             progressBar.setProgress(-1.0);
             progressBar.setVisible(true);
-            new ExportacaoFortesController().exportar(exportarFortes);
+                // Cria uma Task para executar a função de fundo
+            Task<Void> exportTask = getExportTask();
+
+            new Thread(exportTask).start();
+        } else {
+            throw new InvalidParameterException("Layout inválido");
+        }
+    }
+
+    private @NotNull Task<Void> getExportTask() {
+        Task<Void> exportTask = new Task<>() {
+            @Override
+            protected Void call() throws Exception {
+                Thread.sleep(5000);
+                new ExportacaoFortesController().exportar(exportarFortes);
+
+                return null;
+            }
+        };
+
+        exportTask.setOnSucceeded(event -> {
+            // Completa a progressbar
             progressBar.setProgress(1.0);
+
+            // Reativa a UI
+            exportarButton.setDisable(false);
+
+            // Mostra mensagem de sucesso
             var alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Exportação");
             alert.setHeaderText("Exportação de dados");
@@ -162,8 +192,25 @@ public class MainBodyController {
             alert.initOwner(exportarButton.getScene().getWindow());
             alert.showAndWait();
             Log.info(this.getClass(), "Exportação realizada com sucesso no diretório: " + exportarFortes.caminho);
-        } else {
-            throw new InvalidParameterException("Layout inválido");
-        }
+        });
+
+        exportTask.setOnFailed(event -> {
+            // Zera o progresso e esconde a barra
+            progressBar.setProgress(0.0);
+            progressBar.setVisible(false);
+
+            // Reativa a UI
+            exportarButton.setDisable(false);
+
+            // Mostra mensagem de falha.
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro na Exportação");
+            alert.setHeaderText("Erro durante a exportação dos dados");
+            alert.setContentText("Ocorreu um erro durante a exportação. Verifique os logs para mais detalhes.");
+            alert.initOwner(exportarButton.getScene().getWindow());
+            alert.showAndWait();
+            Log.error(this.getClass(), "Erro durante a exportação: " + exportTask.getException());
+        });
+        return exportTask;
     }
 }
