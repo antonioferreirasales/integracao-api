@@ -39,6 +39,8 @@ public class MainBodyController {
     private Button selecionarArquivoButton;
     @FXML
     private Button exportarButton;
+    @FXML
+    private ProgressBar progressBar;
     private ExportarFortesVO exportarFortes;
 
     public void instanciarExportarFortesVO(ExportarFortesVO exportarFortesObj) {
@@ -148,7 +150,11 @@ public class MainBodyController {
         exportarFortes.inventario = registrosComboBox.getCheckModel().isChecked(7);
         exportarFortes.estoqueEscriturado = registrosComboBox.getCheckModel().isChecked(8);
         if (Integer.parseInt(layoutComboBox.getSelectionModel().getSelectedItem().split(" ")[1]) == 175) {
+            progressBar.setProgress(0);
+            progressBar.setProgress(-1.0);
+            progressBar.setVisible(true);
             new ExportacaoFortesController().exportar(exportarFortes);
+            progressBar.setProgress(1.0);
             var alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Exportação");
             alert.setHeaderText("Exportação de dados");
