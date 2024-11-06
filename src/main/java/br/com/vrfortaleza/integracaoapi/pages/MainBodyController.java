@@ -37,6 +37,8 @@ public class MainBodyController {
     private TextField destinoTextField;
     @FXML
     private Button selecionarArquivoButton;
+    @FXML
+    private Button exportarButton;
     private ExportarFortesVO exportarFortes;
 
     public void instanciarExportarFortesVO(ExportarFortesVO exportarFortesObj) {
@@ -147,6 +149,12 @@ public class MainBodyController {
         exportarFortes.estoqueEscriturado = registrosComboBox.getCheckModel().isChecked(8);
         if (Integer.parseInt(layoutComboBox.getSelectionModel().getSelectedItem().split(" ")[1]) == 175) {
             new ExportacaoFortesController().exportar(exportarFortes);
+            var alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Exportação");
+            alert.setHeaderText("Exportação de dados");
+            alert.setContentText("Exportação realizada com sucesso no diretório: " + exportarFortes.caminho);
+            alert.initOwner(exportarButton.getScene().getWindow());
+            alert.showAndWait();
             Log.info(this.getClass(), "Exportação realizada com sucesso no diretório: " + exportarFortes.caminho);
         } else {
             throw new InvalidParameterException("Layout inválido");

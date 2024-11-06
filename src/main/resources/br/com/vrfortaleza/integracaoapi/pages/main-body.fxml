@@ -35,7 +35,7 @@
                     <SelecionarArquivoButton fx:id="selecionarArquivoButton" layoutX="454.0" layoutY="30.0" onAction="#selecionarArquivo" prefHeight="40.0" prefWidth="48.0" />
                     <TextField fx:id="destinoTextField" layoutX="24.0" layoutY="30.0" prefHeight="40.0" prefWidth="380.0" />
                     <Label layoutX="24.0" layoutY="14.0" text="Destino" />
-                    <ExportarButton layoutX="519.0" layoutY="30.0" mnemonicParsing="false" onAction="#exportar" prefHeight="40.0" prefWidth="104.0" text="Exportar" />
+                    <ExportarButton fx:id="exportarButton" layoutX="519.0" layoutY="30.0" mnemonicParsing="false" onAction="#exportar" prefHeight="40.0" prefWidth="104.0" text="Exportar" />
                 </children>
             </AnchorPane>
         </children>
