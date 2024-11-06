@@ -147,7 +147,7 @@ public class MainBodyController {
         exportarFortes.estoqueEscriturado = registrosComboBox.getCheckModel().isChecked(8);
         if (Integer.parseInt(layoutComboBox.getSelectionModel().getSelectedItem().split(" ")[1]) == 175) {
             new ExportacaoFortesController().exportar(exportarFortes);
-            System.out.println("Gerado arquivo Fortes 175");
+            Log.info(this.getClass(), "Exportação realizada com sucesso no diretório: " + exportarFortes.caminho);
         } else {
             throw new InvalidParameterException("Layout inválido");
         }
