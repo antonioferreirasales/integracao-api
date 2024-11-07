@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="101.0" prefWidth="614.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.vrfortaleza.integracaoapi.pages.MainController">
+<VBox alignment="CENTER" prefHeight="101.0" prefWidth="614.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.vrfortaleza.integracaoapi.pages.MainController">
   <MainMenu fx:id="mainMenu" onContextMenuRequested="#loadConfigBody" />
     <Pane fx:id="contentPane" />
    <ButtonBar fx:id="buttonBar" prefHeight="10.0" prefWidth="200.0">
