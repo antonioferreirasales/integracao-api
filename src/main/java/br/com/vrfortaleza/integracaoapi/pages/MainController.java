@@ -1,5 +1,6 @@
 package br.com.vrfortaleza.integracaoapi.pages;
 
+import br.com.vrfortaleza.integracaoapi.config.App;
 import br.com.vrfortaleza.integracaoapi.config.AppProperties;
 import br.com.vrfortaleza.integracaoapi.config.Log;
 import br.com.vrfortaleza.integracaoapi.pages.components.controllers.menu.MainMenu;
@@ -12,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.Pane;
 import org.kordamp.ikonli.feather.Feather;
@@ -34,6 +36,8 @@ public class MainController implements Initializable {
     private Button homeButton;
     @FXML
     private MainMenu mainMenu;
+    @FXML
+    private Label appLabel;
     private MenuItem exportarMenu;
     private ExportarFortesVO exportarFortes;
 
@@ -128,6 +132,7 @@ public class MainController implements Initializable {
         }
         Log.LEVEL = AppProperties.getString("log.nivel");
         Log.setLogLevel();
+        appLabel.setText(App.getAppName() + ": " + App.getAppVersion());
         loadInitialConfig();
         exportarMenu = mainMenu.findMenuItemByName(mainMenu.findMenuByName("_Sistema"), "_Exportar");
         MenuItem configuracoesMenu = mainMenu.findMenuItemByName(mainMenu.findMenuByName("_Sistema"), "Configuração");
