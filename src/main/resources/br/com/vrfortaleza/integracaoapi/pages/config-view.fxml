@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import br.com.vrfortaleza.integracaoapi.pages.components.controllers.menu.*?>
-<?import br.com.vrfortaleza.integracaoapi.pages.components.controllers.tables.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import br.com.vrfortaleza.integracaoapi.pages.components.controllers.menu.CustomToolBar?>
+<?import br.com.vrfortaleza.integracaoapi.pages.components.controllers.tables.LojaConfigTable?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.VBox?>
 
-<TabPane fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="347.0" prefWidth="700.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.vrfortaleza.integracaoapi.pages.ConfigController">
+<TabPane fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="347.0" prefWidth="700.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.vrfortaleza.integracaoapi.pages.ConfigController">
     <tabs>
         <Tab fx:id="lojaTab" closable="false" text="Loja">
          <content>

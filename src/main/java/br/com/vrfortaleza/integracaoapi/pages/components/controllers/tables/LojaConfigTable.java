@@ -19,11 +19,18 @@ public class LojaConfigTable extends TableView<FortesConfiguracaoLojaVO> {
     private TableColumn<FortesConfiguracaoLojaVO, String> cCodigoEstabelecimento = new TableColumn<>("Código Estabelecimento");
     private TableColumn<FortesConfiguracaoLojaVO, Integer> cCodigoIncidencia = new TableColumn<>("Incidência PIS/COFINS");
     private TableColumn<FortesConfiguracaoLojaVO, Integer> cAliquotasEspecificas = new TableColumn<>("Alíquotas Específicas");
+    private String style = """
+            -color-cell-bg-selected: -color-accent-emphasis;
+            -color-cell-fg-selected: -color-fg-emphasis;
+            -color-cell-bg-selected-focused: -color-accent-emphasis;
+            -color-cell-fg-selected-focused: -color-fg-emphasis;""";
 
     private void configColumn() {
         cLojaId.setCellValueFactory(cellData -> cellData.getValue().idLojaProperty());
         cLojaId.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
         cLojaId.setOnEditCommit(event -> event.getRowValue().setIdLoja(event.getNewValue()));
+        cLojaId.setMaxWidth(30.0);
+        cLojaId.setResizable(false);
         cLojaId.setEditable(false);
 
         cLojaNome.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -53,8 +60,16 @@ public class LojaConfigTable extends TableView<FortesConfiguracaoLojaVO> {
         this.getColumns().setAll(cLojaId, cLojaNome, cToken, cCodigoEmpresa, cCodigoEstabelecimento, cCodigoIncidencia, cAliquotasEspecificas);
         this.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
         this.getSelectionModel().selectFirst();
-        this.getStyleClass().add(Styles.DENSE);
+        this.setStyle(style);
+        this.getStyleClass().addAll(Styles.BORDERED ,Styles.DENSE);
         this.setEditable(true);
+
+        for (var column : this.getColumns()) {
+            if (column != cLojaId) {
+                column.setPrefWidth(200);
+                column.setResizable(true);
+            }
+        }
     }
 
     public FortesConfiguracaoLojaVO getFortesConfiguracao() {
