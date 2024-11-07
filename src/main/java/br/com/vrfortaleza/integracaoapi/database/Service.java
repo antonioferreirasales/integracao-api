@@ -60,58 +60,42 @@ public class Service {
         }
     }
 
-    public void updateLoja(FortesConfiguracaoLojaVO fortesConfig) {
+    public void updateLoja(FortesConfiguracaoLojaVO fortesConfig) throws SQLException {
         String sql = "UPDATE lojas SET nome = ?, token = ?, codigoempresa = ?, codigoestabelecimento = ?, codigoincidencia = ?, aliquotasespecificas = ? WHERE id = ?";
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, fortesConfig.getLoja());
-            pstmt.setString(2, fortesConfig.getToken());
-            pstmt.setString(3, fortesConfig.getCodigoEmpresa());
-            pstmt.setString(4, fortesConfig.getCodigoEstabelecimento());
-            if (fortesConfig.getCodigoIncidencia() > 0) {
-                pstmt.setInt(5, fortesConfig.getCodigoIncidencia());
-            } else {
-                pstmt.setNull(5, java.sql.Types.INTEGER);
-            }
-            if (fortesConfig.getAliquotasEspecificas() >= 0) {
-                pstmt.setInt(6, fortesConfig.getAliquotasEspecificas());
-            } else {
-                pstmt.setNull(6, java.sql.Types.INTEGER);
-            }
-            pstmt.setInt(7, fortesConfig.getIdLoja());
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        buildUpdateSQL(pstmt, fortesConfig);
 
-            pstmt.executeUpdate();
+        pstmt.executeUpdate();
             System.out.println("Lojas atualizadas com sucesso!");
-        } catch (SQLException e) {
-            Log.error(this.getClass(), e.getMessage());
-        }
     }
 
-    public void updateLojas(Set<FortesConfiguracaoLojaVO> lojas) {
+    public void updateLojas(Set<FortesConfiguracaoLojaVO> lojas) throws SQLException {
         String sql = "UPDATE lojas SET nome = ?, token = ?, codigoempresa = ?, codigoestabelecimento = ?, codigoincidencia = ?, aliquotasespecificas = ? WHERE id = ?";
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        PreparedStatement pstmt = conn.prepareStatement(sql);
             for (FortesConfiguracaoLojaVO fortesConfig : lojas) {
-                pstmt.setString(1, fortesConfig.getLoja());
-                pstmt.setString(2, fortesConfig.getToken());
-                pstmt.setString(3, fortesConfig.getCodigoEmpresa());
-                pstmt.setString(4, fortesConfig.getCodigoEstabelecimento());
-                if (fortesConfig.getCodigoIncidencia() > 0) {
-                    pstmt.setInt(5, fortesConfig.getCodigoIncidencia());
-                } else {
-                    pstmt.setNull(5, java.sql.Types.INTEGER);
-                }
-                if (fortesConfig.getAliquotasEspecificas() >= 0) {
-                    pstmt.setInt(6, fortesConfig.getAliquotasEspecificas());
-                } else {
-                    pstmt.setNull(6, java.sql.Types.INTEGER);
-                }
-                pstmt.setInt(7, fortesConfig.getIdLoja());
+                buildUpdateSQL(pstmt, fortesConfig);
                 pstmt.addBatch();
             }
             pstmt.executeBatch();
             System.out.println("Lojas atualizadas com sucesso!");
-        } catch (SQLException e) {
-            Log.error(this.getClass(), e.getMessage());
+    }
+
+    private void buildUpdateSQL(PreparedStatement pstmt, FortesConfiguracaoLojaVO fortesConfig) throws SQLException {
+        pstmt.setString(1, fortesConfig.getLoja());
+        pstmt.setString(2, fortesConfig.getToken());
+        pstmt.setString(3, fortesConfig.getCodigoEmpresa());
+        pstmt.setString(4, fortesConfig.getCodigoEstabelecimento());
+        if (fortesConfig.getCodigoIncidencia() > 0) {
+            pstmt.setInt(5, fortesConfig.getCodigoIncidencia());
+        } else {
+            pstmt.setNull(5, Types.INTEGER);
         }
+        if (fortesConfig.getAliquotasEspecificas() >= 0) {
+            pstmt.setInt(6, fortesConfig.getAliquotasEspecificas());
+        } else {
+            pstmt.setNull(6, Types.INTEGER);
+        }
+        pstmt.setInt(7, fortesConfig.getIdLoja());
     }
 
     public void deleteLojas(Set<Integer> idLojas) {

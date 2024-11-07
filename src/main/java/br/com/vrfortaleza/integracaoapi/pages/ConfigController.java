@@ -36,6 +36,7 @@ public class ConfigController implements Initializable {
             try {
                 dbService.updateLoja(lojaConfigTable.getFortesConfiguracao());
             } catch (Exception e) {
+                System.err.println("Erro na inserção de dados: " + e.getMessage());
                 Log.error(this.getClass(), e.getMessage());
             }
         });
