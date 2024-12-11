@@ -5,15 +5,19 @@ import br.com.vrfortaleza.integracaoapi.dao.interfaces.exportacao.fortes.FortesD
 import br.com.vrfortaleza.integracaoapi.util.Arquivo;
 import br.com.vrfortaleza.integracaoapi.util.Format;
 import br.com.vrfortaleza.integracaoapi.vo.ExportarFortesVO;
+import br.com.vrfortaleza.integracaoapi.vo.FortesConfiguracaoLojaVO;
 import br.com.vrfortaleza.integracaoapi.vo.TipoSimNao;
 import br.com.vrfortaleza.integracaoapi.vo.fortes.registros.FortesCABVO;
 import br.com.vrfortaleza.integracaoapi.vo.fortes.registros.FortesTRAVO;
 
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.security.InvalidParameterException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import static br.com.vrfortaleza.integracaoapi.config.App.getAppVersion;
 
 public class Fortes175Service {
     private final FortesDAO oFortesDAO = new FortesDAO();
@@ -43,16 +47,17 @@ public class Fortes175Service {
 
     }
 
-    private FortesCABVO exportarCabecalho(ExportarFortesVO exportacao) throws ParseException {
-        var lojaConfig = oFortesDAO.carregarLoja(exportacao.idLoja);
-        var oCab = new FortesCABVO();
+    private FortesCABVO exportarCabecalho(ExportarFortesVO exportacao) throws ParseException, IOException {
+        String appVersion = getAppVersion();
+        FortesConfiguracaoLojaVO lojaConfig = oFortesDAO.carregarLoja(exportacao.idLoja);
+        FortesCABVO oCab = new FortesCABVO();
 
         String dataInicio = Format.data(exportacao.dataInicio, "yyyy-MM-dd", "dd/MM/yyyy");
         String dataTermino = Format.data(exportacao.dataTermino, "yyyy-MM-dd", "dd/MM/yyyy");
 
         oCab.campo1 = "CAB";
         oCab.campo2 = "175";
-        oCab.campo3 = "Integração API " + "0.0.0";
+        oCab.campo3 = "Integração API " + appVersion;
         oCab.campo4 = new SimpleDateFormat("yyyyMMdd").format(new Date());
         oCab.campo5 = lojaConfig.codigoEmpresa;
         oCab.campo6 = Format.data(exportacao.dataInicio, "yyyy-MM-dd", "yyyyMMdd");
