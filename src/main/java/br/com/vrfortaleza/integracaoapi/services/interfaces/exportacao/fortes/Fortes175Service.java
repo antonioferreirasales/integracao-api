@@ -21,6 +21,7 @@ import static br.com.vrfortaleza.integracaoapi.config.App.getAppVersion;
 
 public class Fortes175Service {
     private final FortesDAO oFortesDAO = new FortesDAO();
+    private final ExportacaoFortesDAO oExportacaoFortesDAO = new ExportacaoFortesDAO();
 
     public void exportar(ExportarFortesVO exportacao, int idLoja) throws Exception {
         var configuracao = oFortesDAO.carregarLoja(idLoja);
@@ -36,6 +37,9 @@ public class Fortes175Service {
         FortesCABVO oCab = exportarCabecalho(exportacao);
         ++exportacao.qtdRegistro;
         arquivo.write(oCab.getString());
+        if(exportacao.participantes) {
+            this.oExportacaoFortesDAO.exportarParticipantes(exportacao, configuracao, arquivo);
+        }
 
         ++exportacao.qtdRegistro;
         FortesTRAVO oTRA = new FortesTRAVO();

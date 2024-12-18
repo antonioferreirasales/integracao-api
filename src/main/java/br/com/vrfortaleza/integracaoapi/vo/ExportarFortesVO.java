@@ -2,7 +2,7 @@ package br.com.vrfortaleza.integracaoapi.vo;
 // interface da tela de exportação do usuário
 public class ExportarFortesVO {
     public String caminho = ""; //caminho de geração do arquivo
-    public int tipoData = 0; //tipo de filtro de data
+    public int tipoData = 2; //tipo de filtro de data
     public String dataInicio = "";
     public String dataTermino = "";
     public int idLoja = 0;

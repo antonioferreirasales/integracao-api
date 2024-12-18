@@ -26,6 +26,9 @@ public class Texto {
     }
 
     public static String substring(String i_valor, int i_beginIndex, int i_endIndex) throws Exception {
+        if (i_valor == null) {
+            return "";
+        }
         if (i_beginIndex >= i_valor.length())
             return "";
         if (i_endIndex > i_valor.length())

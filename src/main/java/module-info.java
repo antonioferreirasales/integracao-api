@@ -12,6 +12,9 @@ module br.com.vrfortaleza.integracaoapi {
     requires org.slf4j.simple;
     requires org.slf4j;
     requires org.xerial.sqlitejdbc;
+    requires java.net.http;
+    requires com.fasterxml.jackson.datatype.jsr310;
+    requires com.fasterxml.jackson.databind;
 
     opens br.com.vrfortaleza.integracaoapi.pages to javafx.fxml;
     opens br.com.vrfortaleza.integracaoapi.pages.components.controllers to javafx.fxml;
@@ -24,4 +27,8 @@ module br.com.vrfortaleza.integracaoapi {
     exports br.com.vrfortaleza.integracaoapi.database;
     opens br.com.vrfortaleza.integracaoapi.pages.components.controllers.menu to javafx.fxml;
     exports br.com.vrfortaleza.integracaoapi.database.schemas;
+    exports br.com.vrfortaleza.integracaoapi.api.util;
+    exports br.com.vrfortaleza.integracaoapi.api.service;
+    exports br.com.vrfortaleza.integracaoapi.api.dto;
+    exports br.com.vrfortaleza.integracaoapi.api.dto.records;
 }
