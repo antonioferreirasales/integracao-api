@@ -37,6 +37,7 @@ public class Fortes175Service {
         FortesCABVO oCab = exportarCabecalho(exportacao);
         ++exportacao.qtdRegistro;
         arquivo.write(oCab.getString());
+        this.oExportacaoFortesDAO.exportarNotasRecebimento(exportacao, configuracao, arquivo);
         if(exportacao.participantes) {
             this.oExportacaoFortesDAO.exportarParticipantes(exportacao, configuracao, arquivo);
         }

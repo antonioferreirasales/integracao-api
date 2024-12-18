@@ -16,31 +16,17 @@ import br.com.vrfortaleza.integracaoapi.vo.TipoContribuinteICMS;
 import br.com.vrfortaleza.integracaoapi.vo.fortes.registros.FortesPARVO;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ExportacaoFortesDAO {
     private List<NotaFiscalRecebimentoDTO> value = null;
+    private final Set<EmitenteDTO> emitentes = new HashSet<>();
     public void exportarParticipantes(ExportarFortesVO exportacao, FortesConfiguracaoLojaVO fortesConfiguracaoVO, Arquivo arquivo) {
         System.out.println("Exportando participantes");
-        String lojaToken = fortesConfiguracaoVO.token;
-        AuthService authService = new AuthService();
         try {
-            String acess_token = authService.authenticate(lojaToken);
-            NotaFiscalRecebimentoService recebimentoService = new NotaFiscalRecebimentoService();
-            this.value = recebimentoService.getNotaFiscalRecebimento(acess_token, LocalDate.parse(exportacao.dataInicio), LocalDate.parse(exportacao.dataTermino), exportacao.tipoData);
-            for (var item: value) {
-                if (item.isXML()) {
-                    continue;
-                }
-                NotaFiscalRecebimentoDetalhesService notaFiscalRecebimentoDetalhesService = new NotaFiscalRecebimentoDetalhesService();
-                NotaFiscalRecebimentoDetalhesDTO notaFiscalRecebimentoDetalhes = notaFiscalRecebimentoDetalhesService.getNotaFiscalRecebimentoDetalhes(acess_token, item.getId());
-                if (notaFiscalRecebimentoDetalhes != null) {
-                    item.setNotaFiscalRecebimentoDetalhes(notaFiscalRecebimentoDetalhes);
-                    System.out.println(item.getNotaFiscalRecebimentoDetalhes().getProdutos().size());
-                } else {
-                    System.out.println("NotaFiscalRecebimentoDetalhes is null");
-                }
-                EmitenteDTO emitente = item.getNotaFiscalRecebimentoDetalhes().getEmitente();
+            for (EmitenteDTO emitente: emitentes) {
                 FortesPARVO oPAR = new FortesPARVO();
                 oPAR.campo1 = "PAR";
                 oPAR.campo2 = Format.number(emitente.getIdEmitente().toString(), 9);
@@ -94,6 +80,33 @@ public class ExportacaoFortesDAO {
                 oPAR.campo40 = "";
                 exportacao.qtdRegistro++;
                 arquivo.write(oPAR.getStringLayout175());
+            }
+        } catch (Exception e) {
+            Log.error(this.getClass(), e.getMessage());
+        }
+    }
+    public void exportarNotasRecebimento(ExportarFortesVO exportacao, FortesConfiguracaoLojaVO fortesConfiguracaoVO, Arquivo arquivo) {
+        System.out.println("Exportando notas de recebimento");
+        String lojaToken = fortesConfiguracaoVO.token;
+        AuthService authService = new AuthService();
+        try {
+            String acess_token = authService.authenticate(lojaToken);
+            NotaFiscalRecebimentoService recebimentoService = new NotaFiscalRecebimentoService();
+            this.value = recebimentoService.getNotaFiscalRecebimento(acess_token, LocalDate.parse(exportacao.dataInicio), LocalDate.parse(exportacao.dataTermino), exportacao.tipoData);
+            for (var item: value) {
+                if (item.isXML()) {
+                    continue;
+                }
+                NotaFiscalRecebimentoDetalhesService notaFiscalRecebimentoDetalhesService = new NotaFiscalRecebimentoDetalhesService();
+                NotaFiscalRecebimentoDetalhesDTO notaFiscalRecebimentoDetalhes = notaFiscalRecebimentoDetalhesService.getNotaFiscalRecebimentoDetalhes(acess_token, item.getId());
+                if (notaFiscalRecebimentoDetalhes != null) {
+                    item.setNotaFiscalRecebimentoDetalhes(notaFiscalRecebimentoDetalhes);
+                    System.out.println(item.getNotaFiscalRecebimentoDetalhes().getProdutos().size());
+                } else {
+                    System.out.println("NotaFiscalRecebimentoDetalhes is null");
+                }
+                EmitenteDTO emitente = item.getNotaFiscalRecebimentoDetalhes().getEmitente();
+                emitentes.add(emitente);
             }
         } catch (Exception e) {
             Log.error(this.getClass(), e.getMessage());
