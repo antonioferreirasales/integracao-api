@@ -170,9 +170,7 @@ public class MainBodyController {
         Task<Void> exportTask = new Task<>() {
             @Override
             protected Void call() throws Exception {
-                Thread.sleep(5000);
                 new ExportacaoFortesController().exportar(exportarFortes);
-
                 return null;
             }
         };
