@@ -1,9 +1,7 @@
 package br.com.vrfortaleza.integracaoapi.api.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import lombok.Getter;
 
 @Data
 public class NotaFiscalRecebimentoDTO {
