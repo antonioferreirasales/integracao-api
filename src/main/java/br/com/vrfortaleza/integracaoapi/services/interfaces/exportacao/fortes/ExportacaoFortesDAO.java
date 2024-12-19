@@ -3,6 +3,7 @@ package br.com.vrfortaleza.integracaoapi.services.interfaces.exportacao.fortes;
 import br.com.vrfortaleza.integracaoapi.api.dto.EmitenteDTO;
 import br.com.vrfortaleza.integracaoapi.api.dto.NotaFiscalRecebimentoDTO;
 import br.com.vrfortaleza.integracaoapi.api.dto.NotaFiscalRecebimentoDetalhesDTO;
+import br.com.vrfortaleza.integracaoapi.api.dto.ProdutoDTO;
 import br.com.vrfortaleza.integracaoapi.api.service.AuthService;
 import br.com.vrfortaleza.integracaoapi.api.service.NotaFiscalRecebimentoDetalhesService;
 import br.com.vrfortaleza.integracaoapi.api.service.NotaFiscalRecebimentoService;
@@ -13,16 +14,22 @@ import br.com.vrfortaleza.integracaoapi.util.Texto;
 import br.com.vrfortaleza.integracaoapi.vo.ExportarFortesVO;
 import br.com.vrfortaleza.integracaoapi.vo.FortesConfiguracaoLojaVO;
 import br.com.vrfortaleza.integracaoapi.vo.TipoContribuinteICMS;
+import br.com.vrfortaleza.integracaoapi.vo.fortes.registros.FortesNOPVO;
 import br.com.vrfortaleza.integracaoapi.vo.fortes.registros.FortesPARVO;
+import br.com.vrfortaleza.integracaoapi.vo.fortes.registros.FortesUNDVO;
 
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ExportacaoFortesDAO {
     private List<NotaFiscalRecebimentoDTO> value = null;
     private final Set<EmitenteDTO> emitentes = new HashSet<>();
+    private final Set<String> UNIDADES = new HashSet<>();
+    private final Set<String> CFOPs = new HashSet<>();
+
     public void exportarParticipantes(ExportarFortesVO exportacao, FortesConfiguracaoLojaVO fortesConfiguracaoVO, Arquivo arquivo) {
         System.out.println("Exportando participantes");
         try {
@@ -85,6 +92,37 @@ public class ExportacaoFortesDAO {
             Log.error(this.getClass(), e.getMessage());
         }
     }
+    public void exportarUnidadeMedida(ExportarFortesVO exportacao, FortesConfiguracaoLojaVO fortesConfiguracaoVO, Arquivo arquivo) {
+        System.out.println("Exportando unidades de medida");
+        try {
+            for (String unidade: UNIDADES) {
+                FortesUNDVO oUND = new FortesUNDVO();
+                oUND.campo1 = "UND";
+                oUND.campo2 = unidade;
+                oUND.campo3 = unidade;
+                exportacao.qtdRegistro++;
+                arquivo.write(oUND.getStringLayout175());
+            }
+        } catch (Exception e) {
+            Log.error(this.getClass(), e.getMessage());
+        }
+    }
+    public void exportarNaturezaOperacao(ExportarFortesVO exportacao, FortesConfiguracaoLojaVO fortesConfiguracaoVO, Arquivo arquivo) {
+        System.out.println("Exportando natureza da operação.");
+        try {
+            for (String cfop: CFOPs) {
+                FortesNOPVO NOP = new FortesNOPVO();
+                NOP.campo1 = "NOP";
+                NOP.campo2 = Format.number(cfop.replace(".", ""), 8);
+                NOP.campo3 = cfop; //validar
+                NOP.campo4 = "N";
+                exportacao.qtdRegistro++;
+                arquivo.write(NOP.getStringLayout175());
+            }
+        } catch (Exception e) {
+            Log.error(this.getClass(), e.getMessage());
+        }
+    }
     public void exportarNotasRecebimento(ExportarFortesVO exportacao, FortesConfiguracaoLojaVO fortesConfiguracaoVO, Arquivo arquivo) {
         System.out.println("Exportando notas de recebimento");
         String lojaToken = fortesConfiguracaoVO.token;
@@ -107,6 +145,11 @@ public class ExportacaoFortesDAO {
                 }
                 EmitenteDTO emitente = item.getNotaFiscalRecebimentoDetalhes().getEmitente();
                 emitentes.add(emitente);
+                List<ProdutoDTO> produtos = item.getNotaFiscalRecebimentoDetalhes().getProdutos();
+                Set<String> subsetUnidades = produtos.stream().map(ProdutoDTO::getCodEmbalagem).collect(Collectors.toSet());
+                UNIDADES.addAll(subsetUnidades);
+                Set<String> subsetCFOP = produtos.stream().map(ProdutoDTO::getCFOP).collect(Collectors.toSet());
+                CFOPs.addAll(subsetCFOP);
             }
         } catch (Exception e) {
             Log.error(this.getClass(), e.getMessage());

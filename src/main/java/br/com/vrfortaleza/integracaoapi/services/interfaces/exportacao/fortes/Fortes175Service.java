@@ -41,6 +41,11 @@ public class Fortes175Service {
         if(exportacao.participantes) {
             this.oExportacaoFortesDAO.exportarParticipantes(exportacao, configuracao, arquivo);
         }
+        if(exportacao.produto) {
+            //faltando grupo produto
+            this.oExportacaoFortesDAO.exportarUnidadeMedida(exportacao, configuracao, arquivo);
+            this.oExportacaoFortesDAO.exportarNaturezaOperacao(exportacao, configuracao, arquivo);
+        }
 
         ++exportacao.qtdRegistro;
         FortesTRAVO oTRA = new FortesTRAVO();
