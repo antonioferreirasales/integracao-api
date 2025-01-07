@@ -37,7 +37,7 @@ public class Fortes175Service {
         FortesCABVO oCab = exportarCabecalho(exportacao);
         ++exportacao.qtdRegistro;
         arquivo.write(oCab.getString());
-        this.oExportacaoFortesDAO.exportarNotasRecebimento(exportacao, configuracao, arquivo);
+        this.oExportacaoFortesDAO.importarNotasRecebimento(exportacao, configuracao);
         if(exportacao.participantes) {
             this.oExportacaoFortesDAO.exportarParticipantes(exportacao, configuracao, arquivo);
         }
@@ -45,6 +45,10 @@ public class Fortes175Service {
             //faltando grupo produto
             this.oExportacaoFortesDAO.exportarUnidadeMedida(exportacao, configuracao, arquivo);
             this.oExportacaoFortesDAO.exportarNaturezaOperacao(exportacao, configuracao, arquivo);
+            this.oExportacaoFortesDAO.exportarProdutos(exportacao, configuracao, arquivo);
+        }
+        if(exportacao.notaEntrada) {
+            this.oExportacaoFortesDAO.exportarNotasRecebimento(exportacao, configuracao, arquivo);
         }
 
         ++exportacao.qtdRegistro;

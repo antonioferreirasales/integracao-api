@@ -1,7 +1,10 @@
 package br.com.vrfortaleza.integracaoapi.util;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 
 public class Format {
     public Format() {
@@ -46,5 +49,21 @@ public class Format {
 
     public static String number(String i_valor, int i_tamanho) {
         return "0".repeat(Math.max(0, i_tamanho - i_valor.length())) + i_valor;
+    }
+    public static String decimal(double i_valor, int i_qtdCasasDecimais) {
+        String mascara = "###,##0";
+        for (int i = 0; i < i_qtdCasasDecimais; i++) {
+            if (!mascara.contains("."))
+                mascara = mascara + ".";
+            mascara = mascara + "0";
+        }
+        return (new DecimalFormat(mascara)).format(Numero.round(i_valor, i_qtdCasasDecimais));
+    }
+    public static String decimal2(double i_valor) {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setDecimalSeparator('.');
+        DecimalFormat decimalFormat = new DecimalFormat("0.00", symbols);
+        decimalFormat.setGroupingUsed(false);
+        return decimalFormat.format(Numero.round(Numero.round(i_valor, 3), 2));
     }
 }

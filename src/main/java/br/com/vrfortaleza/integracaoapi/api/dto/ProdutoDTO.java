@@ -3,6 +3,8 @@ package br.com.vrfortaleza.integracaoapi.api.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.util.Objects;
+
 @Data
 public class ProdutoDTO {
     private Integer id;
@@ -13,7 +15,7 @@ public class ProdutoDTO {
     private Integer idProduto;
     private String descricaoProduto;
     private Integer idCodigoBarras;
-    private String codigoBarras;
+    private String codigoBarras = "0";
     private String quantidade;
     private String quantidadeProduto;
     private String quantidadeVenda;
@@ -41,14 +43,14 @@ public class ProdutoDTO {
     private Integer origemMercadoria;
     private Integer modalidadeBaseCalculo;
     private String valorIsento;
-    private String reducaoICMS;
+    private double reducaoICMS;
     private String valorBaseCalculoICMS;
-    private @JsonProperty("ICMS") String ICMS;
+    private @JsonProperty("ICMS") double ICMS;
     private String valorICMS;
     private String diferido;
     private String valorICMSDiferido;
-    private @JsonProperty("FCP") String FCP;
-    private String valorFCP;
+    private @JsonProperty("FCP") double FCP;
+    private double valorFCP;
     private @JsonProperty("ICMSDesonerado") String ICMSDesonerado;
     private String valorICMSDesonerado;
     private String valorIVA;
@@ -57,22 +59,36 @@ public class ProdutoDTO {
     private String valorBaseCalculoICMSST;
     private @JsonProperty("ICMSST") String ICMSST;
     private String valorICMSST;
-    private @JsonProperty("FCPST") String FCPST;
-    private String valorFCPST;
-    private String valorBaseCalculoICMSSTRetido;
-    private String valorICMSSTRetido;
-    private String valorFCPSTRetido;
+    private @JsonProperty("FCPST") double FCPST;
+    private double valorFCPST;
+    private double valorBaseCalculoICMSSTRetido;
+    private double valorICMSSTRetido;
+    private double valorFCPSTRetido;
     private Integer idLocalEstoque;
-    private String cstpiscofins;
-    private String valorBaseCalculoPISCOFINS;
+    private Integer cstpiscofins;
+    private double valorBaseCalculoPISCOFINS;
     private String pis;
-    private String valorPIS;
+    private double valorPIS;
     private String cofins;
-    private String valorCOFINS;
+    private double valorCOFINS;
     private Boolean custoAtualizado;
-    private String valorBonificado;
-    private String valorBonificacaoDisponivel;
-    private String baseCalculoICMSSTRetAnterior;
-    private String valorICMSSTRetAnterior;
-    private String valorFCPSTRetAnterior;
+    private double valorBonificado;
+    private double valorBonificacaoDisponivel;
+    private double baseCalculoICMSSTRetAnterior;
+    private double valorICMSSTRetAnterior;
+    private double valorFCPSTRetAnterior;
+    private String tipoBaseCalculoCreditoPisCofins;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProdutoDTO produto = (ProdutoDTO) o;
+        return idProduto.equals(produto.idProduto);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(idProduto);
+    }
 }

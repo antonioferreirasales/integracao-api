@@ -24,6 +24,7 @@ public class EmitenteDTO {
     private String inscricaoSuframa = "";
     private String retencaoFunrural = "";
     private String inscricao = "";
+    private String regimeTributario = "";
 
     @Override
     public boolean equals(Object o) {
