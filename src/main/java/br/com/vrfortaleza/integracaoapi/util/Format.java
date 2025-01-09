@@ -66,4 +66,12 @@ public class Format {
         decimalFormat.setGroupingUsed(false);
         return decimalFormat.format(Numero.round(Numero.round(i_valor, 3), 2));
     }
+
+    public static String decimal4(double i_valor) {
+        return decimal4(i_valor, true);
+    }
+
+    public static String decimal4(double i_valor, boolean i_exibeTodasCasas) {
+        return i_exibeTodasCasas ? (new DecimalFormat("###,##0.0000")).format(Numero.round(i_valor, 4)) : (new DecimalFormat("###,##0.00##")).format(Numero.round(i_valor, 4));
+    }
 }
