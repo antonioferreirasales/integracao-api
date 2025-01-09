@@ -19,8 +19,6 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static br.com.vrfortaleza.integracaoapi.vo.SituacaoOperacaoSimplesNacional.*;
-
 public class ExportacaoFortesDAO {
     private List<NotaFiscalRecebimentoDTO> value = null;
     private final Set<EmitenteDTO> emitentes = new HashSet<>();
@@ -45,9 +43,9 @@ public class ExportacaoFortesDAO {
                 NotaFiscalRecebimentoDetalhesDTO notaFiscalRecebimentoDetalhes = notaFiscalRecebimentoDetalhesService.getNotaFiscalRecebimentoDetalhes(acess_token, item.getId());
                 if (notaFiscalRecebimentoDetalhes != null) {
                     item.setNotaFiscalRecebimentoDetalhes(notaFiscalRecebimentoDetalhes);
-                    System.out.println(item.getNotaFiscalRecebimentoDetalhes().getProdutos().size());
                 } else {
-                    System.out.println("NotaFiscalRecebimentoDetalhes is null");
+                    Log.debug(this.getClass(), "Nota: " + item.getNumeroNota() + " | ID: " + item.getId() + ", NotaFiscalRecebimentoDetalhes é nula");
+                    continue;
                 }
                 EmitenteDTO emitente = item.getNotaFiscalRecebimentoDetalhes().getEmitente();
                 emitentes.add(emitente);
@@ -61,6 +59,7 @@ public class ExportacaoFortesDAO {
             }
         } catch (Exception e) {
             Log.error(this.getClass(), e.getMessage());
+            System.err.println(e.getMessage());
         }
     }
 
@@ -240,6 +239,7 @@ public class ExportacaoFortesDAO {
     public void exportarNotasRecebimento(ExportarFortesVO exportacao, FortesConfiguracaoLojaVO fortesConfiguracaoVO, Arquivo arquivo) {
         try {
             for (NotaFiscalRecebimentoDTO item : value) {
+                System.out.println("ID: " + item.getId() + " | Numero Nota: " + item.getNumeroNota());
                 NotaFiscalRecebimentoDetalhesDTO notaDetalhes = item.getNotaFiscalRecebimentoDetalhes();
                 FortesNFMVO oNFM = new FortesNFMVO();
                 oNFM.campo1 = "NFM";
@@ -257,9 +257,9 @@ public class ExportacaoFortesDAO {
                 oNFM.campo9 = Format.number(String.valueOf(notaDetalhes.getNumeroNota()), notaDetalhes.getModelo().equals(ModeloNotaFiscal.NFE.getModelo()) ? 9 : 6);
                 oNFM.campo10 = "";
                 oNFM.campo11 = "";
-                oNFM.campo12 = Format.data(String.valueOf(notaDetalhes.getDataEmissao()), "yyyy-MM-dd'T'HH:mm:ss", "yyyyMMdd");
+                oNFM.campo12 = Format.data(notaDetalhes.getDataEmissao(), "yyyyMMdd");
                 oNFM.campo13 = ""; //TODO | Verificar melhor
-                oNFM.campo14 = Format.data(String.valueOf(notaDetalhes.getDataHoraEntrada()), "yyyy-MM-dd'T'HH:mm:ss", "yyyyMMdd");
+                oNFM.campo14 = Format.data(notaDetalhes.getDataHoraEntrada(), "yyyyMMdd");
                 oNFM.campo15 = Format.number(String.valueOf(notaDetalhes.getEmitente().getIdEmitente()), 9);
                 oNFM.campo16 = ""; //TODO | Verificar objeto recebimentoNotaFiscalGNRE
                 oNFM.campo17 = "";
@@ -322,7 +322,7 @@ public class ExportacaoFortesDAO {
                 oNFM.campo62 = "0.00";
                 oNFM.campo63 = "0.00";
                 oNFM.campo64 = "";
-                oNFM.campo65 = notaDetalhes.getObservacao().replace("\n", " ").replace("|", " ");
+                oNFM.campo65 = notaDetalhes.getObservacao() != null ? notaDetalhes.getObservacao().replace("\n", " ").replace("|", " ") : "";
                 oNFM.campo66 = "";
                 oNFM.campo67 = notaDetalhes.getChaveNFE();
                 oNFM.campo68 = "0.00";
@@ -346,7 +346,7 @@ public class ExportacaoFortesDAO {
                 oNFM.campo86 = "";
                 oNFM.campo87 = "";
                 oNFM.campo88 = "";
-                oNFM.campo89 = Format.data(String.valueOf(notaDetalhes.getDataEmissao()), "yyyy-MM-dd'T'HH:mm:ss", "yyyyMMdd");
+                oNFM.campo89 = Format.data(notaDetalhes.getDataEmissao(), "yyyyMMdd");
                 double somaValorFcpSt = notaDetalhes.getProdutos().stream().filter(oRegistro -> oRegistro.getCSTICMS() != SituacaoTributaria.SUBSTITUIDO.getId()).mapToDouble(ProdutoDTO::getValorFCPST).sum();
                 oNFM.campo90 = (somaValorFcpSt > 0.0D) ? Format.decimal2(somaValorFcpSt) : "0.00";
                 exportacao.qtdRegistro++;
@@ -676,9 +676,11 @@ public class ExportacaoFortesDAO {
                     exportacao.qtdRegistro++;
                     arquivo.write(oPNM.getStringLayout175());
                 }
+                System.out.println("Fim da exportação da nota fiscal.");
             }
         } catch (Exception e) {
             Log.error(this.getClass(), e.getMessage());
+            System.err.println(e.getMessage());
         }
     }
 }

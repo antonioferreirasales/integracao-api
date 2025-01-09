@@ -5,6 +5,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Format {
     public Format() {
@@ -45,6 +46,11 @@ public class Format {
 
     public static String data(String data, String formatoEntrada, String formatoSaida) throws ParseException {
         return (new SimpleDateFormat(formatoSaida)).format((new SimpleDateFormat(formatoEntrada)).parse(data));
+    }
+
+    public static String data( LocalDateTime data, String formatoSaida) throws ParseException {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(formatoSaida);
+        return data.format(formatter);
     }
 
     public static String number(String i_valor, int i_tamanho) {
