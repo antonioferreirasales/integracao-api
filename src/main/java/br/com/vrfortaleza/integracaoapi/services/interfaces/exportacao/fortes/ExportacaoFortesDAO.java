@@ -115,7 +115,13 @@ public class ExportacaoFortesDAO {
                 oPAR.campo35 = ""; //TODO | Indica se o Emitente é uma Administradora de Cartão de Crédito
                 oPAR.campo36 = ""; //TODO | Indica CNAE21
                 oPAR.campo37 = "N";
-                oPAR.campo38 = ""; //TODO | Situação Tributária do Emitente
+                if (emitente.getRegimeTributario() == TipoEmpresa.SIMPLES_NACIONAL.getId()) {
+                    oPAR.campo38 = "1";
+                } else if (emitente.getRegimeTributario() == TipoEmpresa.MEI.getId()) {
+                    oPAR.campo38 = "2";
+                } else {
+                    oPAR.campo38 = "0";
+                }
                 oPAR.campo39 = "";
                 oPAR.campo40 = "";
                 exportacao.qtdRegistro++;
@@ -468,9 +474,8 @@ public class ExportacaoFortesDAO {
                     oPNM.campo36 = "";
                     double aliquotaIcmsSNM = produto.getICMS();
                     String cstPisCofins = "";
-                    int idTipoEmpresa = 1; //TODO | Valor fictício, realmente precisa validar o tipo de empresa
                     boolean isNotaProdutor = false; //TODO | Valor fictício, realmente precisa validar se é nota de produtor
-                    if (idTipoEmpresa == TipoEmpresa.LUCRO_PRESUMIDO.getId()) {
+                    if (notaDetalhes.getIdRegimeTributario() == TipoEmpresa.LUCRO_PRESUMIDO.getId()) {
                         oPNM.campo37 = "";
                         oPNM.campo38 = "";
                     } else if ("5.929, 6.929".contains(produto.getCFOP())) {
@@ -498,13 +503,13 @@ public class ExportacaoFortesDAO {
                     oPNM.campo46 = "";
                     oPNM.campo47 = "";
                     oPNM.campo48 = "";
-                    if (idTipoEmpresa != TipoEmpresa.LUCRO_REAL.getId() && idTipoEmpresa != TipoEmpresa.LUCRO_PRESUMIDO //TODO | Necessário buscar o tipo empresa da loja
+                    if (notaDetalhes.getIdRegimeTributario() != TipoEmpresa.LUCRO_REAL.getId() && notaDetalhes.getIdRegimeTributario() != TipoEmpresa.LUCRO_PRESUMIDO //TODO | Necessário buscar o tipo empresa da loja
                             .getId()) {
                         oPNM.campo49 = produto.getOrigemMercadoria().toString();
                     } else {
                         oPNM.campo49 = "";
                     }
-                    if (idTipoEmpresa != TipoEmpresa.LUCRO_REAL.getId() && idTipoEmpresa != TipoEmpresa.LUCRO_PRESUMIDO //TODO | Necessário buscar o tipo empresa da loja
+                    if (notaDetalhes.getIdRegimeTributario() != TipoEmpresa.LUCRO_REAL.getId() && notaDetalhes.getIdRegimeTributario() != TipoEmpresa.LUCRO_PRESUMIDO //TODO | Necessário buscar o tipo empresa da loja
                             .getId()) {
                         oPNM.campo50 = Format.number(produto.getCSTICMS().toString(), 2);
                     } else {
@@ -515,7 +520,7 @@ public class ExportacaoFortesDAO {
                     oPNM.campo54 = "0.00";
                     oPNM.campo56 = "0.00";
                     oPNM.campo58 = "0.00";
-                    if (((idTipoEmpresa == TipoEmpresa.LUCRO_REAL.getId() || idTipoEmpresa == TipoEmpresa.LUCRO_PRESUMIDO.getId()) && isFornecedorDistribuidor || produto.getCFOP().startsWith("3."))) { //TODO | Necessário verificar se fornecedor realmente é distribuidor
+                    if (((notaDetalhes.getIdRegimeTributario() == TipoEmpresa.LUCRO_REAL.getId() || notaDetalhes.getIdRegimeTributario() == TipoEmpresa.LUCRO_PRESUMIDO.getId()) && isFornecedorDistribuidor || produto.getCFOP().startsWith("3."))) { //TODO | Necessário verificar se fornecedor realmente é distribuidor
                         Integer[] arrayAliquotaPisCofins = {3, 4, 6, 73};
                         if (Arrays.asList(arrayAliquotaPisCofins).contains(produto.getCstpiscofins())) {
                             oPNM.campo52 = Format.decimal4(produto.getCofins()).replace(".", "").replace(",", ".");
