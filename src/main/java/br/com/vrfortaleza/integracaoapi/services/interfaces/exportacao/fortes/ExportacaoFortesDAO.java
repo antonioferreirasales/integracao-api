@@ -382,6 +382,7 @@ public class ExportacaoFortesDAO {
                 arquivo.write(oNFM.getStringLayout175());
 
                 List<ProdutoDTO> produtos = notaDetalhes.getProdutos();
+                int remigeTributarioLoja = notaDetalhes.getIdRegimeTributario();
                 for (ProdutoDTO produto : produtos) {
                     FortesPNMVO oPNM = new FortesPNMVO();
                     oPNM.campo1 = "PNM";
@@ -389,7 +390,12 @@ public class ExportacaoFortesDAO {
                     oPNM.campo3 = produto.getCFOP().replace(".", "").replace(",", ".");
                     oPNM.campo4 = "";
                     oPNM.campo5 = produto.getOrigemMercadoria().toString();
-                    oPNM.campo6 = ""; //TODO | Validar
+                    if (remigeTributarioLoja != TipoEmpresa.LUCRO_REAL.getId() && remigeTributarioLoja != TipoEmpresa.LUCRO_PRESUMIDO
+                            .getId()) {
+                        oPNM.campo6 = "";
+                    } else {
+                        oPNM.campo6 = Format.number(produto.getCSTICMS().toString(), 2);
+                    }
                     oPNM.campo7 = produto.getCodEmbalagem();
                     oPNM.campo8 = Format.decimal2(produto.getQuantidadeProduto());
                     oPNM.campo9 = Format.decimal2(produto.getValorTotalBruto());
@@ -498,7 +504,7 @@ public class ExportacaoFortesDAO {
                     double aliquotaIcmsSNM = produto.getICMS();
                     String cstPisCofins = "";
                     boolean isNotaProdutor = false; //TODO | Valor fictício, realmente precisa validar se é nota de produtor
-                    if (notaDetalhes.getIdRegimeTributario() == TipoEmpresa.LUCRO_PRESUMIDO.getId()) {
+                    if (remigeTributarioLoja == TipoEmpresa.LUCRO_PRESUMIDO.getId()) {
                         oPNM.campo37 = "";
                         oPNM.campo38 = "";
                     } else if ("5.929, 6.929".contains(produto.getCFOP())) {
@@ -526,13 +532,13 @@ public class ExportacaoFortesDAO {
                     oPNM.campo46 = "";
                     oPNM.campo47 = "";
                     oPNM.campo48 = "";
-                    if (notaDetalhes.getIdRegimeTributario() != TipoEmpresa.LUCRO_REAL.getId() && notaDetalhes.getIdRegimeTributario() != TipoEmpresa.LUCRO_PRESUMIDO //TODO | Necessário buscar o tipo empresa da loja
+                    if (remigeTributarioLoja != TipoEmpresa.LUCRO_REAL.getId() && notaDetalhes.getIdRegimeTributario() != TipoEmpresa.LUCRO_PRESUMIDO
                             .getId()) {
                         oPNM.campo49 = produto.getOrigemMercadoria().toString();
                     } else {
                         oPNM.campo49 = "";
                     }
-                    if (notaDetalhes.getIdRegimeTributario() != TipoEmpresa.LUCRO_REAL.getId() && notaDetalhes.getIdRegimeTributario() != TipoEmpresa.LUCRO_PRESUMIDO //TODO | Necessário buscar o tipo empresa da loja
+                    if (notaDetalhes.getIdRegimeTributario() != TipoEmpresa.LUCRO_REAL.getId() && notaDetalhes.getIdRegimeTributario() != TipoEmpresa.LUCRO_PRESUMIDO
                             .getId()) {
                         oPNM.campo50 = Format.number(produto.getCSTICMS().toString(), 2);
                     } else {
@@ -588,9 +594,9 @@ public class ExportacaoFortesDAO {
                     oPNM.campo72 = "";
                     oPNM.campo73 = "";
                     oPNM.campo74 = "";
-//                    if (oFornecedor.idEstado == TipoEstado.PE.getId()) {
-//                        oPNM.campo74 = "1";
-//                    }
+                    if (notaDetalhes.getUfLoja() == TipoEstado.PE.getId()) {
+                        oPNM.campo74 = "1";
+                    }
                     oPNM.campo75 = "";
                     oPNM.campo76 = "";
                     if (exportacao.tipoData == TipoData.EMISSAO.getId()) {
