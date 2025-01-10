@@ -61,4 +61,5 @@ public class NotaFiscalRecebimentoDetalhesDTO {
     private @JsonProperty("recebimentoNotaFiscalEmitente") EmitenteDTO emitente = new EmitenteDTO();
     private @JsonProperty("recebimentoNotaFiscalTransportador") RecebimentoNotaFiscalTransportadorDTO recebimento = new RecebimentoNotaFiscalTransportadorDTO();
     private @JsonProperty("recebimentoNotaFiscalGNRE") NotaFiscalGNREDTO[] gnre;
+    private @JsonProperty("recebimentoNotaFiscalVencimento") NotaFiscalVencimentoDTO[] notaVencimento;
 }

@@ -298,45 +298,47 @@ public class ExportacaoFortesDAO {
                 oNFM.campo23 = "";
                 oNFM.campo24 = "";
                 oNFM.campo25 = "";
-                oNFM.campo26 = Format.decimal2(notaDetalhes.getValorTotal());
-                oNFM.campo27 = Format.decimal2(notaDetalhes.getValorFrete());
+                oNFM.campo26 = notaDetalhes.getSituacaoDocumento() != SituacaoDocumento.CANCELADO.getId() ? Format.decimal2(notaDetalhes.getValorTotal()) : "";
+                oNFM.campo27 = notaDetalhes.getSituacaoDocumento() != SituacaoDocumento.CANCELADO.getId() || notaDetalhes.getSituacaoDocumento() != SituacaoDocumento.INUTILIZADO.getId() ? Format.decimal2(notaDetalhes.getValorFrete()) : "";
                 oNFM.campo28 = "";
                 oNFM.campo29 = Format.decimal2(notaDetalhes.getValorOutrasDespesas());
                 oNFM.campo30 = "";
                 oNFM.campo31 = "";
-                oNFM.campo32 = Format.decimal2(notaDetalhes.getValorIPI());
+                oNFM.campo32 = notaDetalhes.getSituacaoDocumento() != SituacaoDocumento.CANCELADO.getId() || notaDetalhes.getSituacaoDocumento() != SituacaoDocumento.INUTILIZADO.getId() ? Format.decimal2(notaDetalhes.getValorIPI()) : "";
                 oNFM.campo33 = Format.decimal2(notaDetalhes.getValorICMSST());
                 oNFM.campo34 = "0.00";
-                oNFM.campo35 = Format.decimal2(notaDetalhes.getValorDesconto());
-                oNFM.campo36 = Format.decimal2(notaDetalhes.getValorIPI() + notaDetalhes.getValorICMSST());
-                oNFM.campo37 = Format.decimal2(notaDetalhes.getValorTotalProdutos()); //TODO | Validar
+                oNFM.campo35 = notaDetalhes.getSituacaoDocumento() != SituacaoDocumento.CANCELADO.getId() || notaDetalhes.getSituacaoDocumento() != SituacaoDocumento.INUTILIZADO.getId() ? Format.decimal2(notaDetalhes.getValorDesconto()) : "";
+                oNFM.campo36 = Format.decimal2(notaDetalhes.getValorTotal());
+                oNFM.campo37 = Format.decimal2(notaDetalhes.getValorTotalProdutos());
                 oNFM.campo38 = "";
                 oNFM.campo39 = "";
                 oNFM.campo40 = "";
-                oNFM.campo41 = Format.decimal2(notaDetalhes.getValorICMSST());
-                oNFM.campo42 = Format.decimal2(notaDetalhes.getValorBaseCalculoICMSST());
-                oNFM.campo43 = "0.00";
-                oNFM.campo44 = "";
-                oNFM.campo45 = "";
-                oNFM.campo46 = "";
-                oNFM.campo47 = "";
-                if (notaDetalhes.getRecebimento().getModalidadeFrete() == TipoFreteNotaFiscal.DESTINATARIO.getId()) {
-                    oNFM.campo48 = "D";
-                } else if (notaDetalhes.getRecebimento().getModalidadeFrete() == TipoFreteNotaFiscal.EMITENTE.getId()) {
-                    oNFM.campo48 = "R";
-                } else {
-                    oNFM.campo48 = "N";
-                }
-                oNFM.campo49 = ""; //TODO | Confirmar número de parcelas
-                oNFM.campo50 = "";
-                oNFM.campo51 = "";
                 boolean isFornecedorDistribuidor = true; //TODO | Verificar se é fornecedor distribuidor
-                if (isFornecedorDistribuidor) {
-                    oNFM.campo52 = "";
-                    oNFM.campo53 = "";
-                } else {
-                    oNFM.campo52 = Format.decimal2(notaDetalhes.getValorBaseCalculoPISCOFINS());
-                    oNFM.campo53 = Format.decimal2(notaDetalhes.getValorBaseCalculoPISCOFINS());
+                if (notaDetalhes.getSituacaoDocumento() != SituacaoDocumento.CANCELADO.getId() || notaDetalhes.getSituacaoDocumento() != SituacaoDocumento.INUTILIZADO.getId()) {
+                    oNFM.campo41 = Format.decimal2(notaDetalhes.getValorICMSST());
+                    oNFM.campo42 = Format.decimal2(notaDetalhes.getValorBaseCalculoICMSST());
+                    oNFM.campo43 = "0.00";
+                    oNFM.campo44 = "";
+                    oNFM.campo45 = "";
+                    oNFM.campo46 = "";
+                    oNFM.campo47 = "";
+                    if (notaDetalhes.getRecebimento().getModalidadeFrete() == TipoFreteNotaFiscal.DESTINATARIO.getId()) {
+                        oNFM.campo48 = "D";
+                    } else if (notaDetalhes.getRecebimento().getModalidadeFrete() == TipoFreteNotaFiscal.EMITENTE.getId()) {
+                        oNFM.campo48 = "R";
+                    } else {
+                        oNFM.campo48 = "N";
+                    }
+                    oNFM.campo49 = notaDetalhes.getNotaVencimento().length >= 1 ? "P" : "";
+                    oNFM.campo50 = "";
+                    oNFM.campo51 = "";
+                    if (isFornecedorDistribuidor) {
+                        oNFM.campo52 = "";
+                        oNFM.campo53 = "";
+                    } else {
+                        oNFM.campo52 = Format.decimal2(notaDetalhes.getValorBaseCalculoPISCOFINS());
+                        oNFM.campo53 = Format.decimal2(notaDetalhes.getValorBaseCalculoPISCOFINS());
+                    }
                 }
                 oNFM.campo54 = "";
                 oNFM.campo55 = "";
@@ -352,7 +354,7 @@ public class ExportacaoFortesDAO {
                 oNFM.campo65 = notaDetalhes.getObservacao() != null ? notaDetalhes.getObservacao().replace("\n", " ").replace("|", " ") : "";
                 oNFM.campo66 = "";
                 oNFM.campo67 = notaDetalhes.getChaveNFE();
-                oNFM.campo68 = "0.00";
+                oNFM.campo68 = notaDetalhes.getSituacaoDocumento() != SituacaoDocumento.CANCELADO.getId() ? "0.00" : "";
                 oNFM.campo69 = "";
                 oNFM.campo70 = "";
                 oNFM.campo71 = "";
