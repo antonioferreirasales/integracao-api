@@ -179,7 +179,7 @@ public class ExportacaoFortesDAO {
                 oPRO.campo7 = "";
                 oPRO.campo8 = "";
                 oPRO.campo9 = "";
-                oPRO.campo10 = "";
+                oPRO.campo10 = ""; //TODO | Código do grupo do produto
                 oPRO.campo11 = "";
                 oPRO.campo12 = Format.number(produto.getCodigoBarras(), 20);
                 oPRO.campo13 = String.valueOf(produto.getReducaoICMS());
@@ -212,7 +212,7 @@ public class ExportacaoFortesDAO {
                 oPRO.campo40 = "";
                 oPRO.campo41 = produto.getCEST();
                 oPRO.campo42 = "";
-                oPRO.campo43 = (produto.getCstpiscofins() == 60 ? "S" : "N");
+                oPRO.campo43 = (produto.getCSTICMS() == 60 ? "S" : "N");
                 oPRO.campo44 = (produto.getOrigemMercadoria() == TipoOrigemMercadoria.ESTRANGEIRA_IMPORTACAO_DIRETA.getId() ? "S" : "N");
                 oPRO.campo45 = (produto.getCstpiscofins() == 6 ? "S" : "N");
                 oPRO.campo46 = (produto.getCstpiscofins() == 6 ? "S" : "N");
@@ -230,7 +230,7 @@ public class ExportacaoFortesDAO {
 
                 FortesOUMVO oOUM = new FortesOUMVO();
                 oOUM.campo1 = "OUM";
-                oOUM.campo2 = "id"; //TODO | Atualmente não disponível
+                oOUM.campo2 = produto.getIdProduto().toString(); //TODO | Atualmente não disponível
                 oOUM.campo3 = produto.getCodEmbalagem(); //TODO | É apenas o código da embalagem da nota fiscal
                 oOUM.campo4 = Format.decimal(1.0D, 3).replace(".", "").replace(",", ".");
                 oOUM.campo5 = Format.number(produto.getCodigoBarras(), 20);
@@ -255,6 +255,10 @@ public class ExportacaoFortesDAO {
                     oNFM.campo4 = "NF1";
                 } else if (notaDetalhes.getModelo().equals(ModeloNotaFiscal.PRODUTOR.getModelo())) {
                     oNFM.campo4 = "NFP";
+                } else if (notaDetalhes.getModelo().equals(ModeloNotaFiscal.NFCE.getModelo())) {
+                    oNFM.campo4 = "NFC";
+                } else {
+                    oNFM.campo4 = "NFE";
                 }
                 oNFM.campo5 = "N";
                 oNFM.campo6 = "";
@@ -264,9 +268,19 @@ public class ExportacaoFortesDAO {
                 oNFM.campo10 = "";
                 oNFM.campo11 = "";
                 oNFM.campo12 = Format.data(notaDetalhes.getDataEmissao(), "yyyyMMdd");
-                oNFM.campo13 = ""; //TODO | Verificar melhor
+                if (notaDetalhes.getSituacaoDocumento() == SituacaoDocumento.REGULAR.getId()) {
+                    oNFM.campo13 = "0";
+                } else if (notaDetalhes.getSituacaoDocumento() == SituacaoDocumento.CANCELADO.getId()) {
+                    oNFM.campo13 = "1";
+                } else if (notaDetalhes.getSituacaoDocumento() == SituacaoDocumento.COMPLEMENTO.getId()) {
+                    oNFM.campo13 = "6";
+                } else if (notaDetalhes.getSituacaoDocumento() == SituacaoDocumento.INUTILIZADO.getId() && (notaDetalhes.getEmitente().getRegimeTributario() == TipoEmpresa.PRODUTOR_RURAL_PESSOA_JURIDICA.getId() || notaDetalhes.getEmitente().getRegimeTributario() == TipoEmpresa.PRODUTOR_RURAL_PESSOA_FISICA.getId())) {
+                    oNFM.campo13 = "2";
+                } else {
+                    oNFM.campo13 = "";
+                }
                 oNFM.campo14 = Format.data(notaDetalhes.getDataHoraEntrada(), "yyyyMMdd");
-                oNFM.campo15 = Format.number(String.valueOf(notaDetalhes.getEmitente().getIdEmitente()), 9);
+                oNFM.campo15 = Format.number(notaDetalhes.getEmitente().getIdEmitente().toString(), 9);
                 oNFM.campo16 = ""; //TODO | Verificar objeto recebimentoNotaFiscalGNRE
                 oNFM.campo17 = "";
                 oNFM.campo18 = ""; //TODO | Verificar objeto recebimentoNotaFiscalGNRE, atributo de mês referência
