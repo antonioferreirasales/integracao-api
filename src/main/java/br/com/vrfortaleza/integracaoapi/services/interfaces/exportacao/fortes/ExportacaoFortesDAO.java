@@ -281,9 +281,16 @@ public class ExportacaoFortesDAO {
                 }
                 oNFM.campo14 = Format.data(notaDetalhes.getDataHoraEntrada(), "yyyyMMdd");
                 oNFM.campo15 = Format.number(notaDetalhes.getEmitente().getIdEmitente().toString(), 9);
-                oNFM.campo16 = ""; //TODO | Verificar objeto recebimentoNotaFiscalGNRE
+                if (notaDetalhes.getGnre().length > 0) {
+                    var GNRE = notaDetalhes.getGnre()[0];
+                    oNFM.campo16 = GNRE.getModelo() != null ? "S" : "N";
+                    oNFM.campo18 = GNRE.getMesReferencia() != null ? Format.data(GNRE.getMesReferencia(), "MMAAAA") : "";
+                } else {
+                    oNFM.campo16 = "N";
+                    oNFM.campo18 = "";
+
+                }
                 oNFM.campo17 = "";
-                oNFM.campo18 = ""; //TODO | Verificar objeto recebimentoNotaFiscalGNRE, atributo de mês referência
                 oNFM.campo19 = "";
                 oNFM.campo20 = "";
                 oNFM.campo21 = "";
