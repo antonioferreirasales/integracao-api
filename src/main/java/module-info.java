@@ -15,6 +15,7 @@ module br.com.vrfortaleza.integracaoapi {
     requires java.net.http;
     requires com.fasterxml.jackson.datatype.jsr310;
     requires com.fasterxml.jackson.databind;
+    requires java.desktop;
 
     opens br.com.vrfortaleza.integracaoapi.pages to javafx.fxml;
     opens br.com.vrfortaleza.integracaoapi.pages.components.controllers to javafx.fxml;

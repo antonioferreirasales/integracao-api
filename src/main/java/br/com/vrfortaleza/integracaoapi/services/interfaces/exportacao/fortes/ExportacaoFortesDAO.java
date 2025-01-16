@@ -4,6 +4,9 @@ import br.com.vrfortaleza.integracaoapi.api.dto.EmitenteDTO;
 import br.com.vrfortaleza.integracaoapi.api.dto.NotaFiscalRecebimentoDTO;
 import br.com.vrfortaleza.integracaoapi.api.dto.NotaFiscalRecebimentoDetalhesDTO;
 import br.com.vrfortaleza.integracaoapi.api.dto.ProdutoDTO;
+import br.com.vrfortaleza.integracaoapi.api.dto.service.CalculaImpostoNFM;
+import br.com.vrfortaleza.integracaoapi.api.dto.service.ImpostoNFMDTO;
+import br.com.vrfortaleza.integracaoapi.api.dto.service.SituacaoTributariaFortesService;
 import br.com.vrfortaleza.integracaoapi.api.service.AuthService;
 import br.com.vrfortaleza.integracaoapi.api.service.NotaFiscalRecebimentoDetalhesService;
 import br.com.vrfortaleza.integracaoapi.api.service.NotaFiscalRecebimentoService;
@@ -26,6 +29,8 @@ public class ExportacaoFortesDAO {
     private final Set<String> UNIDADES = new HashSet<>();
     private final Set<String> CFOPs = new HashSet<>();
     private AliquotaDAO oAliquotaDAO = new AliquotaDAO();
+    private CalculaImpostoNFM calculaImpostoService = new CalculaImpostoNFM();
+    private SituacaoTributariaFortesService oSituacaoTributariaExportacaoFortesNotaEntradaService = new SituacaoTributariaFortesService();
 
     public void importarNotasRecebimento(ExportarFortesVO exportacao, FortesConfiguracaoLojaVO fortesConfiguracaoVO) {
         System.out.println("Exportando notas de recebimento");
@@ -710,6 +715,86 @@ public class ExportacaoFortesDAO {
                     exportacao.qtdRegistro++;
                     arquivo.write(oPNM.getStringLayout175());
                 }
+
+                List<ImpostoNFMDTO> impostos = this.calculaImpostoService.calculaImpostoNFM(produtos, notaDetalhes.getEmitente());
+                for (ImpostoNFMDTO imposto : impostos) {
+                    FortesINMVO oINM = new FortesINMVO();
+                    oINM.campo1 = "INM";
+                    oINM.campo2 = Format.decimal2(imposto.valorTotalOperacao());
+                    oINM.campo3 = imposto.uf();
+                    oINM.campo4 = imposto.cfop().replace(".", "").replace(",", "");
+                    oINM.campo5 = "";
+                    oINM.campo6 = Format.decimal2(imposto.baseCalculoICMS());
+                    oINM.campo7 = Format.decimal2(imposto.aliquotaICMS());
+                    oINM.campo8 = Format.decimal2(imposto.valorICMS());
+                    oINM.campo9 = Format.decimal2(imposto.valorIsento());
+                    oINM.campo10 = Format.decimal2(imposto.valorOutras());
+                    oINM.campo11 = "";
+                    oINM.campo12 = Format.decimal2(imposto.valorIPI());
+                    oINM.campo13 = "";
+                    oINM.campo14 = "";
+                    oINM.campo15 = (notaDetalhes.getIdRegimeTributario() == TipoEmpresa.SIMPLES_NACIONAL.getId()) ? "S" : "N";
+                    oINM.campo16 = "N";
+                    if (notaDetalhes.getIdRegimeTributario() != TipoEmpresa.LUCRO_REAL.getId() && notaDetalhes.getIdRegimeTributario() != TipoEmpresa.LUCRO_PRESUMIDO.getId()) {
+                        if (imposto.CSTPisCofins() == 75) {
+                            oINM.campo17 = "S";
+                            oINM.campo18 = "S";
+                        } else {
+                            oINM.campo17 = "N";
+                            oINM.campo18 = "N";
+                        }
+                    } else {
+                        oINM.campo17 = "";
+                        oINM.campo18 = "";
+                    }
+                    oINM.campo19 = imposto.tipoOrigem().toString();
+                    if (notaDetalhes.getIdRegimeTributario() != TipoEmpresa.LUCRO_REAL.getId() && notaDetalhes.getIdRegimeTributario() != TipoEmpresa.LUCRO_PRESUMIDO
+                            .getId()) {
+                        oINM.campo20 = "";
+                        oINM.campo22 = Format.number(imposto.cst().toString(), 2);
+                    } else {
+                        oINM.campo20 = Format.number(imposto.cst().toString(), 2);
+                        oINM.campo22 = "";
+                    }
+                    oINM.campo21 = "";
+                    oINM.campo23 = "";
+                    if (notaDetalhes.getIdRegimeTributario() == TipoEmpresa.SIMPLES_NACIONAL.getId() && (imposto.CSTPisCofins() == 4 || imposto.CSTPisCofins() == 70)) {
+                        oINM.campo24 = "S";
+                        oINM.campo25 = "S";
+                    } else {
+                        oINM.campo24 = "N";
+                        oINM.campo25 = "N";
+                    }
+                    if (notaDetalhes.getEmitente().getRegimeTributario() != TipoEmpresa.SIMPLES_NACIONAL.getId() && imposto.FCP() > 0.0D) {
+                        oINM.campo26 = "S";
+                    } else {
+                        oINM.campo26 = "N";
+                    }
+                    oINM.campo27 = "";
+                    if ("30,60".contains(oINM.campo20) || notaDetalhes.getUfLoja() == TipoEstado.CE.getId()) {
+                        oINM.campo28 = "";
+                        oINM.campo29 = "";
+                        oINM.campo30 = "";
+                    } else {
+                        oINM.campo28 = Format.decimal2(imposto.baseCalculoICMS());
+                        oINM.campo29 = Format.decimal2(imposto.valorFCP() / imposto.baseCalculoICMS() * 100.0D);
+                        oINM.campo30 = Format.decimal2(imposto.valorFCP());
+                    }
+                    List<Integer> cstPermitido = this.oSituacaoTributariaExportacaoFortesNotaEntradaService.get();
+                    if (!oINM.campo20.isEmpty() && cstPermitido.contains(Integer.valueOf(oINM.campo20))) {
+                        oINM.campo31 = Format.decimal2(imposto.baseCalculoICMSST());
+                        oINM.campo32 = Format.decimal2(imposto.FCP());
+                        oINM.campo33 = Format.decimal2(imposto.valorFCPST());
+                    } else {
+                        oINM.campo31 = "0.00";
+                        oINM.campo32 = "0.00";
+                        oINM.campo33 = "0.00";
+                    }
+                    oINM.campo34 = "";
+                    exportacao.qtdRegistro++;
+                    arquivo.write(oINM.getStringLayout175());
+                }
+
                 System.out.println("Fim da exportação da nota fiscal.");
             }
         } catch (Exception e) {
