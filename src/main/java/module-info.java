@@ -32,4 +32,5 @@ module br.com.vrfortaleza.integracaoapi {
     exports br.com.vrfortaleza.integracaoapi.api.service;
     exports br.com.vrfortaleza.integracaoapi.api.dto;
     exports br.com.vrfortaleza.integracaoapi.api.dto.records;
+    exports br.com.vrfortaleza.integracaoapi.vo.fortes.registros;
 }

@@ -2,9 +2,7 @@ package br.com.vrfortaleza.integracaoapi.api.dto.service;
 
 import br.com.vrfortaleza.integracaoapi.api.dto.EmitenteDTO;
 import br.com.vrfortaleza.integracaoapi.api.dto.ProdutoDTO;
-import br.com.vrfortaleza.integracaoapi.vo.TipoEstado;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
