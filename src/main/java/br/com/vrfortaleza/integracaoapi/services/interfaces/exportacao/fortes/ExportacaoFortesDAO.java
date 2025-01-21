@@ -4,9 +4,7 @@ import br.com.vrfortaleza.integracaoapi.api.dto.EmitenteDTO;
 import br.com.vrfortaleza.integracaoapi.api.dto.NotaFiscalRecebimentoDTO;
 import br.com.vrfortaleza.integracaoapi.api.dto.NotaFiscalRecebimentoDetalhesDTO;
 import br.com.vrfortaleza.integracaoapi.api.dto.ProdutoDTO;
-import br.com.vrfortaleza.integracaoapi.api.dto.service.CalculaImpostoNFM;
-import br.com.vrfortaleza.integracaoapi.api.dto.service.ImpostoNFMDTO;
-import br.com.vrfortaleza.integracaoapi.api.dto.service.SituacaoTributariaFortesService;
+import br.com.vrfortaleza.integracaoapi.api.dto.service.*;
 import br.com.vrfortaleza.integracaoapi.api.service.AuthService;
 import br.com.vrfortaleza.integracaoapi.api.service.NotaFiscalRecebimentoDetalhesService;
 import br.com.vrfortaleza.integracaoapi.api.service.NotaFiscalRecebimentoService;
@@ -31,6 +29,7 @@ public class ExportacaoFortesDAO {
     private final Set<String> CFOPs = new HashSet<>();
     private AliquotaDAO oAliquotaDAO = new AliquotaDAO();
     private CalculaImpostoNFM calculaImpostoService = new CalculaImpostoNFM();
+    private CalculaImpostoSTNFM calculaImpostoSTService = new CalculaImpostoSTNFM();
     private SituacaoTributariaFortesService oSituacaoTributariaExportacaoFortesNotaEntradaService = new SituacaoTributariaFortesService();
 
     public void importarNotasRecebimento(ExportarFortesVO exportacao, FortesConfiguracaoLojaVO fortesConfiguracaoVO) throws IOException, InterruptedException {
@@ -795,6 +794,27 @@ public class ExportacaoFortesDAO {
                     oINM.campo34 = "";
                     exportacao.qtdRegistro++;
                     arquivo.write(oINM.getStringLayout175());
+                }
+
+                List<ImpostoSTNFMDTO> impostosST = calculaImpostoSTService.calculaImpostoSTNFM(produtos, notaDetalhes.getEmitente());
+                for (ImpostoSTNFMDTO impostoST: impostosST) {
+                    boolean isgeraSNM = (produtos.stream().mapToDouble(ProdutoDTO::getValorICMSST).sum() > 0.0D);
+                    boolean ispossuiMVA = false; //TODO | Atualmente não fornece tabela substituicao
+                    if (!isgeraSNM && !ispossuiMVA)
+                        continue;
+                    FortesSNMVO oSNM = new FortesSNMVO();
+                    oSNM.campo1 = "SNM";
+                    oSNM.campo2 = "1";
+                    oSNM.campo3 = Format.decimal2(impostoST.valorTotal());
+                    oSNM.campo4 = ""; // Confirmar valor
+                    oSNM.campo5 = Format.decimal2(impostoST.valorTotal());
+                    oSNM.campo6 = "";
+                    oSNM.campo7 = "";
+                    oSNM.campo8 = "";
+                    oSNM.campo9 = "";
+
+                    exportacao.qtdRegistro++;
+                    arquivo.write(oSNM.getStringLayout175());
                 }
 
                 System.out.println("Fim da exportação da nota fiscal.");
