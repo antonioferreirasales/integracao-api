@@ -18,6 +18,7 @@ import br.com.vrfortaleza.integracaoapi.util.Texto;
 import br.com.vrfortaleza.integracaoapi.vo.*;
 import br.com.vrfortaleza.integracaoapi.vo.fortes.registros.*;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -32,7 +33,7 @@ public class ExportacaoFortesDAO {
     private CalculaImpostoNFM calculaImpostoService = new CalculaImpostoNFM();
     private SituacaoTributariaFortesService oSituacaoTributariaExportacaoFortesNotaEntradaService = new SituacaoTributariaFortesService();
 
-    public void importarNotasRecebimento(ExportarFortesVO exportacao, FortesConfiguracaoLojaVO fortesConfiguracaoVO) {
+    public void importarNotasRecebimento(ExportarFortesVO exportacao, FortesConfiguracaoLojaVO fortesConfiguracaoVO) throws IOException, InterruptedException {
         System.out.println("Exportando notas de recebimento");
         String lojaToken = fortesConfiguracaoVO.token;
         AuthService authService = new AuthService();
@@ -65,6 +66,7 @@ public class ExportacaoFortesDAO {
         } catch (Exception e) {
             Log.error(this.getClass(), e.getMessage());
             System.err.println(e.getMessage());
+            throw e;
         }
     }
 

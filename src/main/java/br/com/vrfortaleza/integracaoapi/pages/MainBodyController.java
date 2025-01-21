@@ -4,6 +4,7 @@ import br.com.vrfortaleza.integracaoapi.config.AppProperties;
 import br.com.vrfortaleza.integracaoapi.config.Log;
 import br.com.vrfortaleza.integracaoapi.controller.interfaces.exportacao.fortes.ExportacaoFortesController;
 import br.com.vrfortaleza.integracaoapi.dao.interfaces.exportacao.fortes.FortesDAO;
+import br.com.vrfortaleza.integracaoapi.pages.components.controllers.ExceptionAlert;
 import br.com.vrfortaleza.integracaoapi.vo.ExportarFortesVO;
 import br.com.vrfortaleza.integracaoapi.vo.FortesConfiguracaoVO;
 import javafx.concurrent.Task;
@@ -157,7 +158,7 @@ public class MainBodyController {
             progressBar.setProgress(0);
             progressBar.setProgress(-1.0);
             progressBar.setVisible(true);
-                // Cria uma Task para executar a função de fundo
+            // Cria uma Task para executar a função de fundo
             Task<Void> exportTask = getExportTask();
 
             new Thread(exportTask).start();
@@ -200,13 +201,10 @@ public class MainBodyController {
             // Reativa a UI
             exportarButton.setDisable(false);
 
+            Throwable exception = exportTask.getException();
+
             // Mostra mensagem de falha.
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erro na Exportação");
-            alert.setHeaderText("Erro durante a exportação dos dados");
-            alert.setContentText("Ocorreu um erro durante a exportação. Verifique os logs para mais detalhes.");
-            alert.initOwner(exportarButton.getScene().getWindow());
-            alert.showAndWait();
+            ExceptionAlert.show(exception, "Erro na Exportação", "Erro durante a exportação dos dados");
             Log.error(this.getClass(), "Erro durante a exportação: " + exportTask.getException());
         });
         return exportTask;
