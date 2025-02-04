@@ -33,11 +33,11 @@ public class NotaFiscalRecebimentoDetalhesService {
                 } else if (response.statusCode() == 404) {
                     return new NotaFiscalRecebimentoDetalhesDTO();
                 } else {
-                    throw new RuntimeException("Falha ao buscar dados da API da Nota " + idNotaFiscal + ": Código | " + response.statusCode() + " " + response.body());
+                    throw new RuntimeException("Falha ao buscar dados da API da Nota " + idNotaFiscal + ": Código | " + response.statusCode() + " " + response.body() + "| Payload: " + request.bodyPublisher().orElse(null) + " | URL: " + response.uri());
                 }
             } catch (Exception e) {
                 Log.error(this.getClass(), "Erro ao buscar dados da API: " + e.getMessage());
-                System.out.println("Erro ao buscar dados da API: " + e.getMessage());
+                System.out.println(e.getMessage());
             }
             try {
                 TimeUnit.SECONDS.sleep((long) Math.pow(2, i));
