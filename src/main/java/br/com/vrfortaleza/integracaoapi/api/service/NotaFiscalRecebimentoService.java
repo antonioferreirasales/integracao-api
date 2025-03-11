@@ -45,6 +45,8 @@ public class NotaFiscalRecebimentoService {
                 hasMoreRecords = currentNumberOfRecords == PAGE_LIMIT;
                 currentOffset++;
                 Log.info(this.getClass(), "URL: " + URL_PERIODO + " | Response: " + response.statusCode());
+                // Simulate a delay in the response
+                Thread.sleep(250);
             } else {
                 throw new RuntimeException("Falha ao buscar dados da API: " + response.statusCode() + " | " + response.body());
             }
