@@ -3,6 +3,7 @@ package br.com.vrfortaleza.integracaoapi.api.service;
 import br.com.vrfortaleza.integracaoapi.api.APIClient;
 import br.com.vrfortaleza.integracaoapi.api.dto.NotaFiscalRecebimentoDTO;
 import br.com.vrfortaleza.integracaoapi.api.dto.records.NotaRecebimentoResponse;
+import br.com.vrfortaleza.integracaoapi.config.Log;
 import br.com.vrfortaleza.integracaoapi.vo.TipoData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -43,6 +44,7 @@ public class NotaFiscalRecebimentoService {
                 int currentNumberOfRecords = notaRecebimentoResponse.data().size();
                 hasMoreRecords = currentNumberOfRecords == PAGE_LIMIT;
                 currentOffset++;
+                Log.info(this.getClass(), "URL: " + URL_PERIODO + " | Response: " + response.statusCode());
             } else {
                 throw new RuntimeException("Falha ao buscar dados da API: " + response.statusCode() + " | " + response.body());
             }

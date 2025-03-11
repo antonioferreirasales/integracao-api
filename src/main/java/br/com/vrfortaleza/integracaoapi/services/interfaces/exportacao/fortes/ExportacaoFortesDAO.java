@@ -31,13 +31,16 @@ public class ExportacaoFortesDAO {
     private CalculaImpostoNFM calculaImpostoService = new CalculaImpostoNFM();
     private CalculaImpostoSTNFM calculaImpostoSTService = new CalculaImpostoSTNFM();
     private SituacaoTributariaFortesService oSituacaoTributariaExportacaoFortesNotaEntradaService = new SituacaoTributariaFortesService();
+    private String acess_token = null;
 
     public void importarNotasRecebimento(ExportarFortesVO exportacao, FortesConfiguracaoLojaVO fortesConfiguracaoVO) throws IOException, InterruptedException {
         System.out.println("Exportando notas de recebimento");
         String lojaToken = fortesConfiguracaoVO.token;
         AuthService authService = new AuthService();
         try {
-            String acess_token = authService.authenticate(lojaToken);
+            if (acess_token == null) {
+                acess_token = authService.authenticate(lojaToken);
+            }
             NotaFiscalRecebimentoService recebimentoService = new NotaFiscalRecebimentoService();
             this.value = recebimentoService.getNotaFiscalRecebimento(acess_token, LocalDate.parse(exportacao.dataInicio), LocalDate.parse(exportacao.dataTermino), exportacao.tipoData);
             for (var item : value) {

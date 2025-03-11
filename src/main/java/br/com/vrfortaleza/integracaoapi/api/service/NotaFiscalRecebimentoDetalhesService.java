@@ -29,6 +29,9 @@ public class NotaFiscalRecebimentoDetalhesService {
 
                 if (response.statusCode() == 200) {
                     NotaRecebimentoDetalhadoResponse notaRecebimentoResponse = new ObjectMapper().registerModule(new JavaTimeModule()).readValue(response.body(), NotaRecebimentoDetalhadoResponse.class);
+                    Log.info(this.getClass(),   "ID Nota " + idNotaFiscal + " URL: " + NOTA_RECEBIMENTO_DETALHES_URL + " | Response: " + response.statusCode());
+                    // Simulate a delay in the response
+                    Thread.sleep(250);
                     return notaRecebimentoResponse.data();
                 } else if (response.statusCode() == 404) {
                     return new NotaFiscalRecebimentoDetalhesDTO();

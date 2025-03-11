@@ -1,11 +1,13 @@
 package br.com.vrfortaleza.integracaoapi.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.Objects;
 
 @Data
+//@JsonIgnoreProperties(ignoreUnknown = true)
 public class ProdutoDTO {
     private Integer id;
     private Integer idTipoMovimentacao;
@@ -78,6 +80,7 @@ public class ProdutoDTO {
     private double valorICMSSTRetAnterior;
     private double valorFCPSTRetAnterior;
     private String tipoBaseCalculoCreditoPisCofins;
+    private double quantidadeBonificada;
 
     @Override
     public boolean equals(Object o) {

@@ -57,6 +57,7 @@ public class NotaFiscalRecebimentoDetalhesDTO {
     private Integer geraContasAPagarStatus;
     private Integer geraMovimentoEstoqueStatus;
     private Boolean gerarContraNota;
+    private String descricaoTipoMovimentacao;
     private @JsonProperty("recebimentoNotaFiscalProduto") List<ProdutoDTO> produtos = new ArrayList<>();
     private @JsonProperty("recebimentoNotaFiscalEmitente") EmitenteDTO emitente = new EmitenteDTO();
     private @JsonProperty("recebimentoNotaFiscalTransportador") RecebimentoNotaFiscalTransportadorDTO recebimento = new RecebimentoNotaFiscalTransportadorDTO();
