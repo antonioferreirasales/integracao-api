@@ -10,6 +10,12 @@ import java.util.Objects;
 //@JsonIgnoreProperties(ignoreUnknown = true)
 public class ProdutoDTO {
     private Integer id;
+    private Integer idProdutoRecebimento;
+    private Integer idTipoEcf;
+    private Integer idSatNfce;
+    private Integer idVendaCupom;
+    private Integer idPedidoVenda;
+    private boolean isReferenciado;
     private Integer idTipoMovimentacao;
     private Integer idCenarioFiscal;
     private String descricaoTipoMovimentacao;
@@ -37,17 +43,22 @@ public class ProdutoDTO {
     private double valorFrete;
     private double valorSeguro;
     private double valorIPI;
+    private double valorIPIDevolvido;
     private String custoUnitarioProduto;
     private String custoUnitarioAnterior;
     private String custoUnitarioSemImpostoAnterior;
+    private double custoComImposto;
     private String precoComum;
     private String custoCompra;
     private Integer origemMercadoria;
     private Integer modalidadeBaseCalculo;
     private double valorIsento;
+    private double reducao;
     private double reducaoICMS;
     private double valorBaseCalculoICMS;
+    private Integer motivoDesoneracao;
     private @JsonProperty("ICMS") double ICMS;
+    private @JsonProperty("CSOSN") String CSOSN;
     private double valorICMS;
     private String diferido;
     private double valorICMSDiferido;

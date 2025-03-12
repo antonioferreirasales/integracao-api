@@ -1,7 +1,9 @@
 package br.com.vrfortaleza.integracaoapi.api.service;
 
 import br.com.vrfortaleza.integracaoapi.api.APIClient;
+import br.com.vrfortaleza.integracaoapi.api.dto.NotaFiscalEmissaoDTO;
 import br.com.vrfortaleza.integracaoapi.api.dto.NotaFiscalRecebimentoDTO;
+import br.com.vrfortaleza.integracaoapi.api.dto.records.NotaEmissaoResponse;
 import br.com.vrfortaleza.integracaoapi.api.dto.records.NotaRecebimentoResponse;
 import br.com.vrfortaleza.integracaoapi.api.util.HtppGetUtil;
 import br.com.vrfortaleza.integracaoapi.vo.TipoData;
@@ -21,8 +23,8 @@ import java.util.List;
 import static br.com.vrfortaleza.integracaoapi.api.URL.NOTA_EMISSAO_URL;
 
 public class NotaFiscalEmissaoService {
-    public List<NotaFiscalRecebimentoDTO> getNotaFiscalEmissao(String acess_token, LocalDate dataInicio, LocalDate dataFinal, int tipoData) throws IOException, InterruptedException {
-        List<NotaFiscalRecebimentoDTO> allRecords = new ArrayList<>();
+    public List<NotaFiscalEmissaoDTO> getNotaFiscalEmissao(String acess_token, LocalDate dataInicio, LocalDate dataFinal, int tipoData) throws IOException, InterruptedException {
+        List<NotaFiscalEmissaoDTO> allRecords = new ArrayList<>();
         final int PAGE_LIMIT = 500;
         int currentOffset = 0;
         boolean hasMoreRecords = false;
@@ -38,11 +40,13 @@ public class NotaFiscalEmissaoService {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
-                NotaRecebimentoResponse notaRecebimentoResponse = new ObjectMapper().registerModule(new JavaTimeModule()).readValue(response.body(), NotaRecebimentoResponse.class);
-                allRecords.addAll(notaRecebimentoResponse.data());
-                int currentNumberOfRecords = notaRecebimentoResponse.data().size();
+                NotaEmissaoResponse notaEmissaoResponse = new ObjectMapper().registerModule(new JavaTimeModule()).readValue(response.body(), NotaEmissaoResponse.class);
+                allRecords.addAll(notaEmissaoResponse.data());
+                int currentNumberOfRecords = notaEmissaoResponse.data().size();
                 hasMoreRecords = currentNumberOfRecords == PAGE_LIMIT;
                 currentOffset++;
+                // Simulate a delay in the response
+                Thread.sleep(250);
             } else {
                 throw new RuntimeException("Falha ao buscar dados da API: " + response.statusCode() + " | " + response.body());
             }
