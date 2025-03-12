@@ -27,8 +27,21 @@ public class NotaFiscalEmissaoDetalhesDTO {
     private LocalDateTime dataHoraEmissao;
     private LocalDateTime dataSaida;
     private Integer modalidadeFrete;
+    private Integer idPessoaTransportador;
+    private Integer idPessoaTransportadorEndereco;
+    private String pessoaTransportadorRazaosocial;
+    private String pessoaTransportadorCnpj;
+    private String pessoaTransportadorIE;
+    private String pessoaTransportadorEndereco;
+    private String pessoaTransportadorUf;
+    private String pessoaTransportadorNum;
+    private String pessoaTransportadorMunicipio;
     private String placa;
     private String placaUf;
+    private double quantidade;
+    private String especie;
+    private double pesoLiquido;
+    private double pesoBruto;
     private String observacao;
     private String informacaoComplementar;
     private String acrescimoInformacaoComplementar;
@@ -60,10 +73,6 @@ public class NotaFiscalEmissaoDetalhesDTO {
     private Integer geraContasAReceberStatus;
     private Integer finalidade;
     private double valorICMSDesoneradoTotal;
-
-    private @JsonProperty("recebimentoNotaFiscalProduto") List<ProdutoDTO> produtos = new ArrayList<>();
-    private @JsonProperty("recebimentoNotaFiscalEmitente") EmitenteDTO emitente = new EmitenteDTO();
-    private @JsonProperty("recebimentoNotaFiscalTransportador") RecebimentoNotaFiscalTransportadorDTO recebimento = new RecebimentoNotaFiscalTransportadorDTO();
-    private @JsonProperty("recebimentoNotaFiscalGNRE") NotaFiscalGNREDTO[] gnre;
-    private @JsonProperty("recebimentoNotaFiscalVencimento") NotaFiscalVencimentoDTO[] notaVencimento;
+    private @JsonProperty("emissaoNotaFiscalPessoaDestinatario") PessoaDestinatarioDTO pessoaDestinatario;
+    private @JsonProperty("emissaoNotaFiscalProduto") List<ProdutoDTO> produtos = new ArrayList<>();
 }

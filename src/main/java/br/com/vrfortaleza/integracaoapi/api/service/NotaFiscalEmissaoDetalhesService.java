@@ -1,0 +1,56 @@
+package br.com.vrfortaleza.integracaoapi.api.service;
+
+import br.com.vrfortaleza.integracaoapi.api.APIClient;
+import br.com.vrfortaleza.integracaoapi.api.dto.NotaFiscalEmissaoDetalhesDTO;
+import br.com.vrfortaleza.integracaoapi.api.dto.NotaFiscalRecebimentoDetalhesDTO;
+import br.com.vrfortaleza.integracaoapi.api.dto.records.NotaEmissaoDetalhadoResponse;
+import br.com.vrfortaleza.integracaoapi.api.dto.records.NotaRecebimentoDetalhadoResponse;
+import br.com.vrfortaleza.integracaoapi.api.util.HtppGetUtil;
+import br.com.vrfortaleza.integracaoapi.config.Log;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.concurrent.TimeUnit;
+
+import static br.com.vrfortaleza.integracaoapi.api.URL.NOTA_EMISSAO_URL;
+import static br.com.vrfortaleza.integracaoapi.api.URL.NOTA_RECEBIMENTO_URL;
+
+public class NotaFiscalEmissaoDetalhesService {
+    private static final int MAX_RETRIES = 5;
+
+    public NotaFiscalEmissaoDetalhesDTO getNotaFiscalEmissaoDetalhes(String token, int idNotaFiscal) {
+        String NOTA_EMISSAO_DETALHES_URL = NOTA_EMISSAO_URL + "/" + idNotaFiscal;
+        HttpClient client = APIClient.getClient();
+        HttpRequest request = HtppGetUtil.createRequest(NOTA_EMISSAO_DETALHES_URL, token);
+
+        for (int i = 0; i < MAX_RETRIES; i++) {
+            try {
+                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+                if (response.statusCode() == 200) {
+                    NotaEmissaoDetalhadoResponse notaEmissaoResponse = new ObjectMapper().registerModule(new JavaTimeModule()).readValue(response.body(), NotaEmissaoDetalhadoResponse.class);
+                    Log.info(this.getClass(),   "ID Nota " + idNotaFiscal + " URL: " + NOTA_EMISSAO_DETALHES_URL + " | Response: " + response.statusCode());
+                    // Simulate a delay in the response
+                    Thread.sleep(250);
+                    return notaEmissaoResponse.data();
+                } else if (response.statusCode() == 404) {
+                    return new NotaFiscalEmissaoDetalhesDTO();
+                } else {
+                    throw new RuntimeException("Falha ao buscar dados da API da Nota " + idNotaFiscal + ": Código | " + response.statusCode() + " " + response.body() + "| Payload: " + request.bodyPublisher().orElse(null) + " | URL: " + response.uri());
+                }
+            } catch (Exception e) {
+                Log.error(this.getClass(), "Erro ao buscar dados da API: " + e.getMessage());
+                System.out.println(e.getMessage());
+            }
+            try {
+                TimeUnit.SECONDS.sleep((long) Math.pow(2, i));
+            } catch (InterruptedException e) {
+                Log.error(this.getClass(),"Erro ao dormir thread: " + e.getMessage());
+            }
+        }
+        throw new RuntimeException("Falha após " + MAX_RETRIES + " tentativas para buscar dados da API da Nota " + idNotaFiscal);
+    }
+}
