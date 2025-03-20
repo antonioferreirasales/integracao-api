@@ -1,9 +1,11 @@
 package br.com.vrfortaleza.integracaoapi.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.util.List;
 import java.util.Objects;
 
 @Data
@@ -15,16 +17,19 @@ public class ProdutoDTO {
     private Integer idSatNfce;
     private Integer idVendaCupom;
     private Integer idPedidoVenda;
-    private boolean isReferenciado;
+    private @JsonProperty("isReferenciado") boolean isReferenciado;
     private Integer idTipoMovimentacao;
     private Integer idCenarioFiscal;
     private String descricaoTipoMovimentacao;
     private Integer numeroItem;
     private Integer idProduto;
+    private List<Integer> tipoProduto;
     private String descricaoProduto;
     private Integer idCodigoBarras;
     private String codigoBarras = "0";
     private double quantidade;
+    private String quantidadeEmbalagem;
+    private String embalagem;
     private double quantidadeProduto;
     private double quantidadeVenda;
     private double quantidadeCompra;
@@ -33,11 +38,12 @@ public class ProdutoDTO {
     private double valorUnitario;
     private double valorUnitarioProduto;
     private double valorTotalBruto;
-    private @JsonProperty("NCM") String NCM;
+    private @JsonAlias({"NCM", "ncm"}) String NCM;
     private Integer excecaoNCM;
-    private @JsonProperty("CEST") String CEST;
-    private @JsonProperty("CFOP") String CFOP;
-    private @JsonProperty("CSTICMS") Integer CSTICMS;
+    private @JsonAlias({"CEST", "cest"}) String CEST;
+    private @JsonAlias({"CFOP", "cfop"}) String CFOP;
+    private @JsonAlias({"CSTICMS", "csticms"}) Integer CSTICMS;
+    private String reducaost;
     private double valorOutrasDespesas;
     private double valorDesconto;
     private double valorFrete;
@@ -57,22 +63,23 @@ public class ProdutoDTO {
     private double reducaoICMS;
     private double valorBaseCalculoICMS;
     private Integer motivoDesoneracao;
-    private @JsonProperty("ICMS") double ICMS;
-    private @JsonProperty("CSOSN") String CSOSN;
+    private @JsonAlias({"ICMS", "icms"}) double ICMS;
+    private @JsonAlias({"CSOSN", "csosn"}) String CSOSN;
     private double valorICMS;
     private String diferido;
     private double valorICMSDiferido;
-    private @JsonProperty("FCP") double FCP;
+    private @JsonAlias({"FCP", "fcp"}) double FCP;
+    private double valorBaseCalculoSTRetido;
     private double valorFCP;
-    private @JsonProperty("ICMSDesonerado") String ICMSDesonerado;
+    private @JsonAlias({"ICMSDesonerado", "icmsdesonerado"}) String ICMSDesonerado;
     private double valorICMSDesonerado;
     private double valorIVA;
     private String percentualIVA;
     private double reducaoICMSST;
     private double valorBaseCalculoICMSST;
-    private @JsonProperty("ICMSST") double ICMSST;
+    private @JsonAlias({"ICMSST", "icmsst"}) double ICMSST;
     private double valorICMSST;
-    private @JsonProperty("FCPST") double FCPST;
+    private @JsonAlias({"FCPST", "fcpst"}) double FCPST;
     private double valorFCPST;
     private double valorBaseCalculoICMSSTRetido;
     private double valorICMSSTRetido;

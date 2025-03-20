@@ -38,6 +38,7 @@ public class Fortes175Service {
         ++exportacao.qtdRegistro;
         arquivo.write(oCab.getString());
         this.oExportacaoFortesDAO.importarNotasRecebimento(exportacao, configuracao);
+        this.oExportacaoFortesDAO.importarNotasEmissao(exportacao, configuracao);
         if(exportacao.participantes) {
             this.oExportacaoFortesDAO.exportarParticipantes(exportacao, configuracao, arquivo);
         }
