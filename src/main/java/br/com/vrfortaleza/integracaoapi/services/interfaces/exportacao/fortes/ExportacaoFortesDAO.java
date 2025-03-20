@@ -1,14 +1,8 @@
 package br.com.vrfortaleza.integracaoapi.services.interfaces.exportacao.fortes;
 
-import br.com.vrfortaleza.integracaoapi.api.dto.EmitenteDTO;
-import br.com.vrfortaleza.integracaoapi.api.dto.NotaFiscalRecebimentoDTO;
-import br.com.vrfortaleza.integracaoapi.api.dto.NotaFiscalRecebimentoDetalhesDTO;
-import br.com.vrfortaleza.integracaoapi.api.dto.ProdutoDTO;
+import br.com.vrfortaleza.integracaoapi.api.dto.*;
 import br.com.vrfortaleza.integracaoapi.api.dto.service.*;
-import br.com.vrfortaleza.integracaoapi.api.service.AuthService;
-import br.com.vrfortaleza.integracaoapi.api.service.NotaFiscalEmissaoService;
-import br.com.vrfortaleza.integracaoapi.api.service.NotaFiscalRecebimentoDetalhesService;
-import br.com.vrfortaleza.integracaoapi.api.service.NotaFiscalRecebimentoService;
+import br.com.vrfortaleza.integracaoapi.api.service.*;
 import br.com.vrfortaleza.integracaoapi.config.Log;
 import br.com.vrfortaleza.integracaoapi.dao.interfaces.exportacao.fortes.AliquotaDAO;
 import br.com.vrfortaleza.integracaoapi.util.Arquivo;
@@ -23,7 +17,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class ExportacaoFortesDAO {
-    private List<NotaFiscalRecebimentoDTO> value = null;
+    private List<NotaFiscalRecebimentoDTO> notaRecebimentovalue = null;
+    private List<NotaFiscalEmissaoDTO> notaEmissaovalue = null;
     private final Set<EmitenteDTO> emitentes = new HashSet<>();
     private final Set<ProdutoDTO> PRODUTOS = new HashSet<>();
     private final Set<String> UNIDADES = new HashSet<>();
@@ -43,8 +38,8 @@ public class ExportacaoFortesDAO {
                 acess_token = authService.authenticate(lojaToken);
             }
             NotaFiscalRecebimentoService recebimentoService = new NotaFiscalRecebimentoService();
-            this.value = recebimentoService.getNotaFiscalRecebimento(acess_token, LocalDate.parse(exportacao.dataInicio), LocalDate.parse(exportacao.dataTermino), exportacao.tipoData);
-            for (var item : value) {
+            this.notaRecebimentovalue = recebimentoService.getNotaFiscalRecebimento(acess_token, LocalDate.parse(exportacao.dataInicio), LocalDate.parse(exportacao.dataTermino), exportacao.tipoData);
+            for (var item : notaRecebimentovalue) {
                 if (item.isXML()) {
                     continue;
                 }
@@ -82,23 +77,21 @@ public class ExportacaoFortesDAO {
                 acess_token = authService.authenticate(lojaToken);
             }
             NotaFiscalEmissaoService emissaoService = new NotaFiscalEmissaoService();
-            this.value = emissaoService.getNotaFiscalEmissao(acess_token, LocalDate.parse(exportacao.dataInicio), LocalDate.parse(exportacao.dataTermino), exportacao.tipoData);
-            for (var item : value) {
-                if (item.isXML()) {
-                    continue;
-                }
-                NotaFiscalRecebimentoDetalhesService notaFiscalRecebimentoDetalhesService = new NotaFiscalRecebimentoDetalhesService();
-                NotaFiscalRecebimentoDetalhesDTO notaFiscalRecebimentoDetalhes = notaFiscalRecebimentoDetalhesService.getNotaFiscalRecebimentoDetalhes(acess_token, item.getId());
-                if (notaFiscalRecebimentoDetalhes != null) {
-                    item.setNotaFiscalRecebimentoDetalhes(notaFiscalRecebimentoDetalhes);
+            this.notaEmissaovalue = emissaoService.getNotaFiscalEmissao(acess_token, LocalDate.parse(exportacao.dataInicio), LocalDate.parse(exportacao.dataTermino), exportacao.tipoData);
+            for (var item : notaEmissaovalue) {
+                NotaFiscalEmissaoDetalhesService notaFiscalEmissaoDetalhesService = new NotaFiscalEmissaoDetalhesService();
+                NotaFiscalEmissaoDetalhesDTO notaFiscalEmissaoDetalhes = notaFiscalEmissaoDetalhesService.getNotaFiscalEmissaoDetalhes(acess_token, item.getId());
+                if (notaFiscalEmissaoDetalhes != null) {
+                    item.setNotaFiscalEmissaoDetalhes(notaFiscalEmissaoDetalhes);
                 } else {
                     Log.debug(this.getClass(), "Nota: " + item.getNumeroNota() + " | ID: " + item.getId() + ", NotaFiscalRecebimentoDetalhes é nula");
                     continue;
                 }
-                EmitenteDTO emitente = item.getNotaFiscalRecebimentoDetalhes().getEmitente();
-                emitentes.add(emitente);
-                List<ProdutoDTO> produtos = item.getNotaFiscalRecebimentoDetalhes().getProdutos();
-                Set<ProdutoDTO> produtosUnicos = new HashSet<>(item.getNotaFiscalRecebimentoDetalhes().getProdutos());
+                // TODO | Revisar
+//                EmitenteDTO emitente = item.getNotaFiscalRecebimentoDetalhes().getEmitente();
+//                emitentes.add(emitente);
+                List<ProdutoDTO> produtos = item.getNotaFiscalEmissaoDetalhes().getProdutos();
+                Set<ProdutoDTO> produtosUnicos = new HashSet<>(item.getNotaFiscalEmissaoDetalhes().getProdutos());
                 PRODUTOS.addAll(produtosUnicos);
                 Set<String> subsetUnidades = produtos.stream().map(ProdutoDTO::getCodEmbalagem).collect(Collectors.toSet());
                 UNIDADES.addAll(subsetUnidades);
@@ -293,7 +286,7 @@ public class ExportacaoFortesDAO {
 
     public void exportarNotasRecebimento(ExportarFortesVO exportacao, FortesConfiguracaoLojaVO fortesConfiguracaoVO, Arquivo arquivo) {
         try {
-            for (NotaFiscalRecebimentoDTO item : value) {
+            for (NotaFiscalRecebimentoDTO item : notaRecebimentovalue) {
                 System.out.println("ID: " + item.getId() + " | Numero Nota: " + item.getNumeroNota());
                 NotaFiscalRecebimentoDetalhesDTO notaDetalhes = item.getNotaFiscalRecebimentoDetalhes();
                 FortesNFMVO oNFM = new FortesNFMVO();

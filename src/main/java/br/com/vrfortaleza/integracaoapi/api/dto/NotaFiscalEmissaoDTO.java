@@ -33,4 +33,5 @@ public class NotaFiscalEmissaoDTO {
     private int geraContasAReceberStatus;
     private String razaoSocial;
     private String siglaUf;
+    NotaFiscalEmissaoDetalhesDTO notaFiscalEmissaoDetalhes = new NotaFiscalEmissaoDetalhesDTO();
 }
