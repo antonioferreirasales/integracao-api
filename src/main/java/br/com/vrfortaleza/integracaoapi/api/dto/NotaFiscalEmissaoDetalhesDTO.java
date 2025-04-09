@@ -75,5 +75,6 @@ public class NotaFiscalEmissaoDetalhesDTO {
     private double valorICMSDesoneradoTotal;
     private @JsonProperty("emissaoNotaFiscalPessoaDestinatario") PessoaDestinatarioDTO pessoaDestinatario;
     private @JsonProperty("emissaoNotaFiscalProduto") List<ProdutoDTO> produtos = new ArrayList<>();
+    private NotaFiscalFaturamentoDTO emissaoNotaFiscalVencimento = new NotaFiscalFaturamentoDTO();
 
 }

@@ -20,6 +20,7 @@ public class ExportacaoFortesDAO {
     private List<NotaFiscalRecebimentoDTO> notaRecebimentovalue = null;
     private List<NotaFiscalEmissaoDTO> notaEmissaovalue = null;
     private final Set<EmitenteDTO> emitentes = new HashSet<>();
+    private final Set<PessoaDestinatarioDTO> destinatarios = new HashSet<>();
     private final Set<ProdutoDTO> PRODUTOS = new HashSet<>();
     private final Set<String> UNIDADES = new HashSet<>();
     private final Set<String> CFOPs = new HashSet<>();
@@ -28,6 +29,7 @@ public class ExportacaoFortesDAO {
     private CalculaImpostoSTNFM calculaImpostoSTService = new CalculaImpostoSTNFM();
     private SituacaoTributariaFortesService oSituacaoTributariaExportacaoFortesNotaEntradaService = new SituacaoTributariaFortesService();
     private String acess_token = null;
+    private NotasEmissao notaEmissao = new NotasEmissao();
 
     public void importarNotasRecebimento(ExportarFortesVO exportacao, FortesConfiguracaoLojaVO fortesConfiguracaoVO) throws IOException, InterruptedException {
         System.out.println("Exportando notas de recebimento");
@@ -88,8 +90,8 @@ public class ExportacaoFortesDAO {
                     continue;
                 }
                 // TODO | Revisar
-//                EmitenteDTO emitente = item.getNotaFiscalRecebimentoDetalhes().getEmitente();
-//                emitentes.add(emitente);
+                PessoaDestinatarioDTO destinatario = item.getNotaFiscalEmissaoDetalhes().getPessoaDestinatario();
+                destinatarios.add(destinatario);
                 List<ProdutoDTO> produtos = item.getNotaFiscalEmissaoDetalhes().getProdutos();
                 Set<ProdutoDTO> produtosUnicos = new HashSet<>(item.getNotaFiscalEmissaoDetalhes().getProdutos());
                 PRODUTOS.addAll(produtosUnicos);
@@ -860,4 +862,9 @@ public class ExportacaoFortesDAO {
             System.err.println(e.getMessage());
         }
     }
+
+    public void exportarNotasEmissao(ExportarFortesVO exportacao, FortesConfiguracaoLojaVO fortesConfiguracaoVO, Arquivo arquivo) {
+        notaEmissao.exportar(exportacao, fortesConfiguracaoVO, arquivo, notaEmissaovalue);
+    }
+
 }

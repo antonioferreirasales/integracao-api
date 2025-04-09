@@ -51,6 +51,9 @@ public class Fortes175Service {
         if(exportacao.notaEntrada) {
             this.oExportacaoFortesDAO.exportarNotasRecebimento(exportacao, configuracao, arquivo);
         }
+        if(exportacao.notaSaida) {
+            this.oExportacaoFortesDAO.exportarNotasEmissao(exportacao, configuracao, arquivo);
+        }
 
         ++exportacao.qtdRegistro;
         FortesTRAVO oTRA = new FortesTRAVO();
