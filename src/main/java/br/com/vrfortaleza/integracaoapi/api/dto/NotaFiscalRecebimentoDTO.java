@@ -27,5 +27,6 @@ public class NotaFiscalRecebimentoDTO {
     private int geraContasAPagarStatus;
     private int geraMovimentoEstoqueStatus;
     private String descricaoTipoMovimentacao;
+    private int idPedidoCompra;
     private NotaFiscalRecebimentoDetalhesDTO notaFiscalRecebimentoDetalhes = new NotaFiscalRecebimentoDetalhesDTO();
 }

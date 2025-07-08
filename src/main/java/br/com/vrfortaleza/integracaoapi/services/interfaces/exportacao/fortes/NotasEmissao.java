@@ -223,8 +223,8 @@ public class NotasEmissao {
                         porcentagemPnmInm = Format.decimal2(produto.getICMS());
                         oPNM.campo13 = porcentagemPnmInm;
                     } else {
-                        oPNM.campo13 = Format.decimal2(rstProduto.getDouble("porcentagem"));
-                        porcentagemPnmInm = Format.decimal2(rstProduto.getDouble("porcentagem"));
+                        oPNM.campo13 = Format.decimal2(produto.getICMS());
+                        porcentagemPnmInm = Format.decimal2(produto.getICMS());
                     }
                     if (produto.getValorBaseCalculoICMSST() > 0.0D) {
                         oPNM.campo14 = Format.decimal2(produto.getValorBaseCalculoICMSST());
@@ -272,27 +272,35 @@ public class NotasEmissao {
                         oPNM.campo39 = Format.decimal2(baseCalculoContribuicao).replace(".", "").replace(",", ".");
                         oPNM.campo40 = Format.decimal2(baseCalculoContribuicao).replace(".", "").replace(",", ".");
                     }
-                    double valorfinal = rstProduto.getDouble("valortotal") - rstProduto.getDouble("valordesconto");
-                    oPNM.campo41 = Format.decimal2(rstProduto.getDouble("valorfrete")).replace(".", "").replace(",", ".");
+                    double valorfinal = produto.getValorTotalBruto() + produto.getValorFrete() + produto.getValorOutrasDespesas() - produto.getValorDesconto();
+                    oPNM.campo41 = Format.decimal2(produto.getValorFrete()).replace(".", "").replace(",", ".");
                     oPNM.campo42 = "0.00";
-                    oPNM.campo43 = Format.decimal2(rstProduto.getDouble("valordesconto")).replace(".", "").replace(",", ".");
+                    oPNM.campo43 = Format.decimal2(produto.getValorDesconto()).replace(".", "").replace(",", ".");
                     oPNM.campo44 = Format.decimal2(valorfinal).replace(".", "").replace(",", ".");
                     if (oPNM.campo37.equals("49")) {
                         oPNM.campo45 = "";
                         oPNM.campo46 = "";
                         oPNM.campo47 = "";
                     } else {
-                        int[] arrayCstNaturezaReceita = { 2, 3, 4, 5, 6, 7, 8, 9 };
-                        if (ArrayUtils.contains(arrayCstNaturezaReceita, rstProduto.getInt("cstpiscofins"))) {
-                            oPNM.campo45 = getCodigoACFiscal(rstProduto.getInt("tiponaturezareceita"), rstProduto.getInt("cstpiscofins"));
-                            oPNM.campo46 = getCodigoACFiscal(rstProduto.getInt("tiponaturezareceita"), rstProduto.getInt("cstpiscofins"));
-                            oPNM.campo47 = (verificaProdepe(rstProduto.getInt("id")) == true) ? getCodigoACFiscal(rstProduto.getInt("tiponaturezareceita"), rstProduto.getInt("cstpiscofins")) : "";
-                        } else {
-                            oPNM.campo45 = "";
-                            oPNM.campo46 = "";
-                            oPNM.campo47 = "";
-                        }
+//                        int[] arrayCstNaturezaReceita = { 2, 3, 4, 5, 6, 7, 8, 9 };
+//                        if (ArrayUtils.contains(arrayCstNaturezaReceita, rstProduto.getInt("cstpiscofins"))) {
+//                            oPNM.campo45 = getCodigoACFiscal(rstProduto.getInt("tiponaturezareceita"), rstProduto.getInt("cstpiscofins"));
+//                            oPNM.campo46 = getCodigoACFiscal(rstProduto.getInt("tiponaturezareceita"), rstProduto.getInt("cstpiscofins"));
+//                            oPNM.campo47 = (verificaProdepe(rstProduto.getInt("id")) == true) ? getCodigoACFiscal(rstProduto.getInt("tiponaturezareceita"), rstProduto.getInt("cstpiscofins")) : "";
+//                        } else {
+//                            oPNM.campo45 = "";
+//                            oPNM.campo46 = "";
+//                            oPNM.campo47 = "";
+//                        }
                     }
+                    oPNM.campo48 = "";
+                    oPNM.campo49 = "";
+                    oPNM.campo50 = "";
+                    oPNM.campo51 = "1";
+                    oPNM.campo52 = "0.00";
+                    oPNM.campo54 = "0.00";
+                    oPNM.campo56 = "0.00";
+                    oPNM.campo58 = "0.00";
 
                     exportacao.qtdRegistro++;
                     arquivo.write(oPNM.getStringLayout175());
