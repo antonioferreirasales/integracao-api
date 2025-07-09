@@ -4,14 +4,61 @@ import atlantafx.base.theme.Styles;
 import atlantafx.base.util.IntegerStringConverter;
 import br.com.vrfortaleza.integracaoapi.vo.FortesConfiguracaoLojaVO;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.StringConverter;
 
+import java.util.Map;
 import java.util.Set;
 
 public class LojaConfigTable extends TableView<FortesConfiguracaoLojaVO> {
+    private final Map<Integer, String> incidenciaOptions = Map.of(
+            1, "Exclusivamente no regime não-cumulativo",
+            2, "Exclusivamente no regime cumulativo",
+            3, "Nos regimes cumulativo e não-cumulativo"
+    );
+
+    StringConverter<Integer> incidenciaConverter = new StringConverter<>() {
+        @Override
+        public String toString(Integer object) {
+            return incidenciaOptions.getOrDefault(object, "Unknown");
+        }
+
+        @Override
+        public Integer fromString(String string) {
+            return incidenciaOptions.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(string))
+                    .map(Map.Entry::getKey)
+                    .findFirst()
+                    .orElse(null); // Or throw exception, depending on your logic
+        }
+    };
+
+    private final Map<Integer, String> aliquotasOptions = Map.of(
+            0, "Não",
+            1, "Sim"
+    );
+
+    StringConverter<Integer> aliquotasConverter = new StringConverter<>() {
+        @Override
+        public String toString(Integer object) {
+            return aliquotasOptions.getOrDefault(object, "Unknown");
+        }
+
+        @Override
+        public Integer fromString(String string) {
+            return aliquotasOptions.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(string))
+                    .map(Map.Entry::getKey)
+                    .findFirst()
+                    .orElse(null);
+        }
+    };
+
     private TableColumn<FortesConfiguracaoLojaVO, Integer> cLojaId = new TableColumn<>("ID");
     private TableColumn<FortesConfiguracaoLojaVO, String> cLojaNome = new TableColumn<>("Loja");
     private TableColumn<FortesConfiguracaoLojaVO, String> cToken = new TableColumn<>("Token");
@@ -49,12 +96,14 @@ public class LojaConfigTable extends TableView<FortesConfiguracaoLojaVO> {
         cCodigoEstabelecimento.setCellFactory(TextFieldTableCell.forTableColumn());
         cCodigoEstabelecimento.setOnEditCommit(event -> event.getRowValue().setCodigoEstabelecimento(event.getNewValue()));
 
+        ObservableList<Integer> options = FXCollections.observableArrayList(1, 2, 3);
         cCodigoIncidencia.setCellValueFactory(cellData -> cellData.getValue().codigoIncidenciaProperty());
-        cCodigoIncidencia.setCellFactory(ComboBoxTableCell.forTableColumn(1, 2, 3));
+        cCodigoIncidencia.setCellFactory(ComboBoxTableCell.forTableColumn(incidenciaConverter, options));
         cCodigoIncidencia.setOnEditCommit(event -> event.getRowValue().setCodigoIncidencia(event.getNewValue()));
 
+        ObservableList<Integer> aliquotasOptionsList = FXCollections.observableArrayList(0, 1);
         cAliquotasEspecificas.setCellValueFactory(cellData -> cellData.getValue().aliquotasEspecificasProperty());
-        cAliquotasEspecificas.setCellFactory(ComboBoxTableCell.forTableColumn(0, 1));
+        cAliquotasEspecificas.setCellFactory(ComboBoxTableCell.forTableColumn(aliquotasConverter, aliquotasOptionsList));
         cAliquotasEspecificas.setOnEditCommit(event -> event.getRowValue().setAliquotasEspecificas(event.getNewValue()));
 
         this.getColumns().setAll(cLojaId, cLojaNome, cToken, cCodigoEmpresa, cCodigoEstabelecimento, cCodigoIncidencia, cAliquotasEspecificas);
