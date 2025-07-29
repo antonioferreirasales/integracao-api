@@ -328,6 +328,129 @@ public class NotasEmissao {
 //                    String contaExterna = getContaContabil(idContaContabilCredito);
 //                    oPNM.campo63 = contaExterna;
                     oPNM.campo64 = "0";
+                    var produtoGeraDevolucao = false; //TODO: Verificar se o produto gera devolução corretamente
+                    if (produtoGeraDevolucao) {
+//                        if (rstProduto.getInt("cstpiscofins") == 98 || rstProduto.getInt("cstpiscofins") == 99) {
+//                            oPNM.campo65 = String.valueOf(rstProduto.getInt("csapiscofins"));
+//                            oPNM.campo66 = String.valueOf(rstProduto.getInt("csapiscofins"));
+//                        } else {
+//                            oPNM.campo65 = "";
+//                            oPNM.campo66 = "";
+//                        }
+//                        if (oPNM.campo37.equals("49") && Double.parseDouble(oPNM.campo39) > 0.0D) {
+//                            oPNM.campo67 = Format.number(rstProduto.getString("tipocredito"), 3);
+//                            oPNM.campo68 = Format.number(rstProduto.getString("tipocredito"), 3);
+//                        } else {
+//                            oPNM.campo67 = "";
+//                            oPNM.campo68 = "";
+//                        }
+                    } else {
+                        oPNM.campo65 = "";
+                        oPNM.campo66 = "";
+                        oPNM.campo67 = "";
+                        oPNM.campo68 = "";
+                    }
+                    oPNM.campo69 = "";
+                    oPNM.campo70 = "";
+                    oPNM.campo71 = "";
+                    oPNM.campo72 = "";
+                    oPNM.campo73 = "";
+                    if (notaDetalhes.getUfLoja() == TipoEstado.PE.getId()) {
+                        oPNM.campo74 = "1";
+                    } else {
+                        oPNM.campo74 = "";
+                    }
+                    oPNM.campo75 = "";
+                    oPNM.campo76 = "";
+                    if (exportacao.tipoData == TipoData.EMISSAO.getId()) {
+                        oPNM.campo77 = Format.decimal2(produto.getValorTotalBruto());
+                        if (produto.getValorTotalBruto() > 0.0D && produto.getFCP() >= 2.0D)
+                            oPNM.campo78 = Format.decimal2(produto.getFCP());
+                        // TODO: Verificar se é necessário preencher o campo 79 e 80
+//                        oPNM.campo79 = Format.decimal2(rstProduto.getDouble("aliq_orig_perc"));
+//                        oPNM.campo80 = Format.decimal2(rstProduto.getDouble("aliq_dest_perc"));
+                        oPNM.campo79 = "";
+                        oPNM.campo80 = "";
+                    }
+                    if (produto.getCFOP().equals("5.401") || produto.getCFOP().equals("5.402") || produto.getCFOP().equals("5.403") || produto.getCFOP().equals("5.405") || produto.getCFOP().equals("6.401") || produto.getCFOP().equals("6.403") || produto.getCFOP().equals("6.404")) {
+                        oPNM.campo81 = "N";
+                    } else if (produto.getFCP() > 0.0D) {
+                        oPNM.campo81 = "S";
+                    } else {
+                        oPNM.campo81 = "N";
+                    }
+                    oPNM.campo82 = "";
+                    boolean excluirIcmsDaBaseDeCalculoDoPisCofinsSaida = false; //TODO: Verificar se deve excluir ICMS da base de cálculo
+                    if (excluirIcmsDaBaseDeCalculoDoPisCofinsSaida)
+                        oPNM.campo83 = Format.decimal2(produto.getICMS());
+                    oPNM.campo85 = "";
+                    oPNM.campo86 = "";
+                    oPNM.campo87 = "";
+                    oPNM.campo88 = "";
+                    oPNM.campo89 = "";
+                    oPNM.campo90 = "";
+                    oPNM.campo91 = "N";
+                    oPNM.campo92 = "";
+                    oPNM.campo93 = "";
+                    oPNM.campo94 = "";
+                    oPNM.campo95 = "";
+                    oPNM.campo96 = "";
+                    oPNM.campo97 = "";
+                    oPNM.campo98 = "";
+                    oPNM.campo99 = "";
+                    oPNM.campo100 = "";
+                    oPNM.campo101 = "";
+                    oPNM.campo102 = "";
+                    oPNM.campo103 = "";
+                    oPNM.campo104 = "";
+                    oPNM.campo105 = "";
+                    oPNM.campo106 = "";
+                    oPNM.campo107 = "";
+                    oPNM.campo108 = "";
+                    oPNM.campo108 = "";
+                    oPNM.campo109 = "";
+                    oPNM.campo110 = "";
+                    oPNM.campo111 = "";
+                    oPNM.campo112 = "";
+                    oPNM.campo113 = "";
+                    oPNM.campo114 = "";
+                    oPNM.campo115 = "";
+                    oPNM.campo116 = "";
+                    oPNM.campo117 = "";
+                    oPNM.campo118 = "";
+                    oPNM.campo119 = "";
+                    oPNM.campo120 = "";
+                    oPNM.campo121 = "";
+                    oPNM.campo122 = "";
+                    oPNM.campo123 = "";
+                    oPNM.campo124 = "";
+                    oPNM.campo125 = "";
+                    oPNM.campo126 = "";
+                    oPNM.campo127 = "";
+                    oPNM.campo128 = "";
+                    oPNM.campo129 = "";
+                    oPNM.campo130 = "";
+                    oPNM.campo131 = "";
+                    oPNM.campo132 = "";
+                    oPNM.campo133 = "";
+                    // TODO: checar valores monofásicos que não estão disponíveis
+                    if (produto.getCSTICMS() == 61) {
+//                        oPNM.campo135 = Format.decimal2(rstProduto.getDouble("valorbasecalculoicmsmonofasico"));
+//                        oPNM.campo136 = Format.decimal2(rstProduto.getDouble("aliquotaicmsmonofasico"));
+//                        oPNM.campo137 = Format.decimal2(rstProduto.getDouble("valoricmsmonofasico"));
+                        oPNM.campo135 = Format.decimal2(produto.getValorBaseCalculoICMS());
+                        oPNM.campo136 = Format.decimal2(produto.getICMS());
+                        oPNM.campo137 = Format.decimal2(produto.getValorICMS());
+                    } else {
+                        oPNM.campo135 = "";
+                        oPNM.campo136 = "";
+                        oPNM.campo137 = "";
+                    }
+                    int[] aCstPisCofinsSaida = { 70, 98 };
+                    if (ArrayUtils.contains(aCstPisCofinsSaida, produto.getCstpiscofins())) {
+                        oPNM.campo39 = "0.00";
+                        oPNM.campo40 = "0.00";
+                    }
 
                     exportacao.qtdRegistro++;
                     arquivo.write(oPNM.getStringLayout175());
