@@ -14,6 +14,7 @@ import br.com.vrfortaleza.integracaoapi.vo.TipoFreteNotaFiscal;
 import br.com.vrfortaleza.integracaoapi.vo.fortes.registros.FortesNFMVO;
 import br.com.vrfortaleza.integracaoapi.vo.fortes.registros.FortesPNMVO;
 import br.com.vrfortaleza.integracaoapi.vo.*;
+import org.apache.commons.lang.ArrayUtils;
 
 import java.util.List;
 
@@ -300,7 +301,33 @@ public class NotasEmissao {
                     oPNM.campo52 = "0.00";
                     oPNM.campo54 = "0.00";
                     oPNM.campo56 = "0.00";
-                    oPNM.campo58 = "0.00";
+                    // Se a empresa for do tipo Lucro Real ou Lucro Presumido e for distribuidor, ou se o CFOP começar com 3.
+                    var idTipoFornecedor = 1; // TODO: Obter o ID do fornecedor corretamente
+                    boolean isDistribuidor = true; //TODO: Verificar se é distribuidor corretamente
+                    if (((idTipoFornecedor == TipoEmpresa.LUCRO_REAL.getId() || idTipoFornecedor == TipoEmpresa.LUCRO_PRESUMIDO.getId()) && isDistribuidor || produto.getCFOP().startsWith("3."))) {
+                        int[] arrayAliquotaPisCofins = { 3, 4, 6, 73 };
+                        if (ArrayUtils.contains(arrayAliquotaPisCofins, produto.getCstpiscofins())) {
+                            oPNM.campo52 = Format.decimal4(produto.getCofins());
+                            oPNM.campo56 = Format.decimal4(produto.getPis());
+                        }
+                        int[] arrayValorPisCofins = { 4, 6, 73 };
+                        if (ArrayUtils.contains(arrayValorPisCofins, produto.getCstpiscofins())) {
+                            oPNM.campo54 = "";
+                            oPNM.campo58 = "";
+                        }
+                    }
+                    oPNM.campo53 = "";
+                    oPNM.campo55 = "1";
+                    oPNM.campo57 = "";
+                    oPNM.campo59 = "";
+                    oPNM.campo60 = "";
+                    oPNM.campo61 = "";
+                    oPNM.campo62 = Format.decimal2(produto.getValorOutrasDespesas());
+                    oPNM.campo63 = ""; //TODO: Verificar se é necessário preencher este campo
+//                    int idContaContabilCredito = this.oParametroContabilidadeDAO.carregarContaContabilTiposaida(rstProduto.getInt("id_tiposaida"));
+//                    String contaExterna = getContaContabil(idContaContabilCredito);
+//                    oPNM.campo63 = contaExterna;
+                    oPNM.campo64 = "0";
 
                     exportacao.qtdRegistro++;
                     arquivo.write(oPNM.getStringLayout175());
