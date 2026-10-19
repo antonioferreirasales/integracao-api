@@ -4,6 +4,10 @@
 <?import br.com.vrfortaleza.integracaoapi.pages.components.controllers.tables.LojaConfigTable?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Button?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.VBox?>
 
 <TabPane fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="347.0" prefWidth="700.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.vrfortaleza.integracaoapi.pages.ConfigController">
@@ -19,5 +23,17 @@
          </content>
         </Tab>
         <Tab fx:id="invetarioTab" closable="false" text="Inventário" />
+        <Tab closable="false" text="API">
+            <content>
+                <VBox spacing="12">
+                    <padding><Insets top="16" right="16" bottom="16" left="16" /></padding>
+                    <Label text="Config-Token" />
+                    <Label text="Token de configuração da API, diferente do token cadastrado por loja." wrapText="true" />
+                    <PasswordField fx:id="configTokenField" promptText="Informe o Config-Token" />
+                    <Button text="Salvar configuração da API" onAction="#salvarApi" />
+                    <Label fx:id="apiStatusLabel" wrapText="true" />
+                </VBox>
+            </content>
+        </Tab>
     </tabs>
 </TabPane>

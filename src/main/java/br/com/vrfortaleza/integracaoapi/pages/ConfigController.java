@@ -1,6 +1,7 @@
 package br.com.vrfortaleza.integracaoapi.pages;
 
 import br.com.vrfortaleza.integracaoapi.config.Log;
+import br.com.vrfortaleza.integracaoapi.config.ApiConfig;
 import br.com.vrfortaleza.integracaoapi.database.Service;
 import br.com.vrfortaleza.integracaoapi.pages.components.controllers.menu.CustomToolBar;
 import br.com.vrfortaleza.integracaoapi.pages.components.controllers.tables.LojaConfigTable;
@@ -9,6 +10,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.Label;
 import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
 
@@ -16,6 +19,22 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class ConfigController implements Initializable {
+    @FXML
+    private PasswordField configTokenField;
+    @FXML
+    private Label apiStatusLabel;
+
+    @FXML
+    private void salvarApi() {
+        try {
+            ApiConfig.saveConfigToken(configTokenField.getText());
+            apiStatusLabel.setText("Configuração salva. Será usada nas próximas consultas.");
+        } catch (IllegalArgumentException e) {
+            apiStatusLabel.setText(e.getMessage());
+        } catch (java.io.IOException e) {
+            apiStatusLabel.setText("Não foi possível salvar. Verifique a permissão de escrita no diretório da aplicação.");
+        }
+    }
     @FXML
     private TabPane tabPane;
     @FXML
@@ -57,6 +76,11 @@ public class ConfigController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        try {
+            configTokenField.setText(ApiConfig.loadConfigToken());
+        } catch (java.io.IOException e) {
+            apiStatusLabel.setText("Não foi possível carregar a configuração da API.");
+        }
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         tabPane.setMinWidth(450);
 

@@ -3,7 +3,7 @@ package br.com.vrfortaleza.integracaoapi.api.util;
 import java.net.URI;
 import java.net.http.HttpRequest;
 
-import static br.com.vrfortaleza.integracaoapi.api.URL.CONFIG_TOKEN;
+import br.com.vrfortaleza.integracaoapi.config.ApiConfig;
 
 public class HtppGetUtil {
     public static HttpRequest createRequest(String url, String accessToken) {
@@ -11,7 +11,7 @@ public class HtppGetUtil {
                 .uri(URI.create(url))
                 .header("Content-Type", "application/json")
                 .header("Authorization", "Bearer " + accessToken)
-                .header("Config-Token", CONFIG_TOKEN)
+                .header("Config-Token", ApiConfig.requireConfigToken())
                 .build();
     }
 }
